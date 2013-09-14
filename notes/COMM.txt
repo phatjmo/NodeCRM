@@ -1,0 +1,427 @@
+*SUBROUTINE COMM_REPORT
+*  This program is proprietary and is not to be used by or disclosed to others, nor is it to be copied
+*  without written permission from Specialty Graphics Inc.
+!
+*÷ Version         :    AREV 2.1
+*÷ Definition      :    This report is run weekly to calculate the commissions
+*                       for reps based on order activity during the selected
+*                       time frame
+*÷ Author          :    Kenneth A. Sawyer
+*÷ Date Created    :    11-29-91
+*÷ Revision History:
+*  MM-DD-YY     Person        Description of changes
+*  --------     ------        ----------------------
+************If a change is made to this program in calculating commissions,
+************the report COMM_SUM_RPT needs to be modified also!!!!
+
+*  04-17-93     KEN           Replaced "." in index calls to "_"
+*                             Changed insert file from INCLUDE to SYSINCLUDE
+
+EQU SCI$ TO 'Copyright (C) 1991, Specialty Graphics Inc.'
+$INSERT SYSINCLUDE,AREV.COMMON.MAIN
+$INSERT SYSINCLUDE,WINDOW.CONSTANTS
+DECLARE SUBROUTINE CATALYST
+DECLARE SUBROUTINE MSG
+DECLARE SUBROUTINE BTREE.EXTRACT
+
+** Program Top
+OPEN 'ORDERS' TO FILE.ORDERS ELSE MSG("CANNOT OPEN ORDERS FILE",'','','')
+OPEN 'DICT ORDERS' TO DICT.ORDERS ELSE MSG("CANNOT OPEN ORDERS DICTIONARY",'','','')
+OPEN 'CORDERS' TO FILE.CORDERS ELSE MSG("CANNOT OPEN CORDERS FILE",'','','')
+OPEN 'DICT CORDERS' TO DICT.CORDERS ELSE MSG("CANNOT OPEN CORDERS DICTIONARY",'','','')
+CATALYST ('P','POPUPS*REP_NAMES')
+REPS = @ANS
+IF @ANS = '' THEN STOP
+CATALYST ('P','POPUPS*P/T')
+OUTPUT = @ANS
+@PSEUDO<1> = DATE() -7
+@PSEUDO<2> = DATE()
+CATALYST ('W','DATE_RANGE')
+START = @PSEUDO<1>
+END   = @PSEUDO<2>
+END1  = @PSEUDO<2>
+T1REPS = "" ; T1REP_COM = ""  ; *team rep, team commission variables
+T2REPS = "" ; T2REP_COM = ""  ; *team rep, team commission variables
+T1_COM = 0  ; T2_COM = 0 ; NAME = "" ; TEAM_TOTAL = 0
+IF OUTPUT = 'P' THEN PRINTER ON ELSE PRINT @(-1)
+
+FOR X = 1 TO COUNT(REPS,@VM)+1
+
+  FRONT_SALES = 0  ;  * first time customer sales
+  RELOAD_SALES = 0 ;  * repeat customer sales
+  BILL_TOTAL = 0   ;  * total amount billed
+  BELOW_PAR = 0    ;  * amount of orders sold below par
+  BONUS_SALES = 0 ;  BONUS  = 0       ;  LINE = 0       ;  MAX_LINES = 55
+  WAGES       = 0 ;  SALARY = 0       ;  NAME = ''      ;  PAGE = 1
+  COMM = 0        ;  ITEM = 1         ;  CB_CODE = ''   ;  CB_AMOUNT = 0
+  CB_CUST = ''    ;  CB_TOTAL = 0     ;  TO_COMM = 0   ;  TO_AMOUNT = 0
+  FRONT_LEVEL = 1500      ; UNDER_PAR = ''
+  RELOAD_LEVEL = 2500
+  LINE_COMM = 0   ; * the commision for the order
+  RCV_COMM = 0    ; * commision that comes after 14 days after rcv date
+  CREDIT = 0      ; * credit that is due but not paid because rcv date + 14 has not passed
+  CR = ""         ; * indicates that the order was paid by credit card
+  CR_LINE = ""    ; * credit commision line that will print
+  CR_COMM = ""    ; * credit commision for the line
+  CR_ITEM = 0     ; * item counter for credit lines
+  CALL_CENTER = 0
+  IF REPS<1,X> >= 500 AND REPS<1,X> < 600 THEN CALL_CENTER = 1
+  GOSUB HEADING
+  STRING = '' ; @ANS = '' ; HITS = ''
+  STRING<1> = "CROSS_XREF"
+  FOR DATE  = (START) TO (END)
+    STRING := @VM:REPS<1,X>:"*NEW*":DATE
+  NEXT DATE
+  STRING := @FM
+*  MSG("SEARCH-":STRING,'','','')
+  IF REPS<1,X> > 400 AND REPS<1,X> < 500 THEN
+     BTREE.EXTRACT(STRING,"CORDERS",DICT.CORDERS,HITS)
+     IF HITS > "" THEN
+       SALARY = XLATE('REPS',REPS<1,X>,15,'X')
+       FOR Y = 1 TO COUNT(HITS,@VM)+1
+         READ RECORD FROM FILE.CORDERS,HITS<1,Y> ELSE MSG("CANNOT READ CORDER ":HITS<1,Y>,'','','')
+         COMM = COMM+RECORD<32>
+         FOR I = 1 TO COUNT(RECORD<15>,@VM)+1
+           LINE_COMM=.15*(RECORD<18,I>)
+           PRINT ITEM"L#3":"> ":HITS<1,Y>"L#7":OCONV(RECORD<2>,'D0/')"L#9":RECORD<13>"L#18":" ":RECORD<9>"L#1":UNDER_PAR"L#3":RECORD<15,I>"R#5":" ":RECORD<16,I>"L#4":OCONV((RECORD<18,I>),'MD2,')"R#11":OCONV(LINE_COMM,'MD2,')"R#13"
+           ITEM += 1
+         NEXT I
+       NEXT Y
+       WAGES = SALARY + COMM
+       PRINT "_______________________________________________________________________________"
+       PRINT "                                      Total Wages Before Tax ":OCONV(WAGES,'MD2,$')"R#15"
+     END ELSE
+       MSG("No Orders were found to calculate commisions with.",'T2','','')
+     END
+  END ELSE
+     BTREE.EXTRACT(STRING,"ORDERS",DICT.ORDERS,HITS)
+     IF HITS GT "" THEN
+       MSG("Calculating %1% Orders...",'T1','',COUNT(HITS,@VM)+1)
+       FOR Y = 1 TO COUNT(HITS,@VM)+1
+         LOGO = 0
+         READ RECORD FROM FILE.ORDERS,HITS<1,Y> ELSE MSG("CANNOT READ ORDER ":HITS<1,1>,'','','')
+         IF RECORD<40> GT 0 THEN LOGO = RECORD<40> * 1000
+         IF RECORD<9> = 'F' THEN
+           FRONT_SALES = FRONT_SALES + (RECORD<21> - RECORD<20>)   ; * add order par to front sales
+         END
+         IF RECORD<9> = 'R' THEN
+           RELOAD_SALES = RELOAD_SALES + (RECORD<21> - RECORD<20>) ; * add order par to reload sales total
+         END
+         IF (RECORD<21> - RECORD<20>) - LOGO < RECORD<19> THEN
+           BELOW_PAR = BELOW_PAR + (RECORD<21> - RECORD<20>)
+         END
+         BILL_TOTAL = BILL_TOTAL + RECORD<19>
+         LINE_COMM = RECORD<22>
+         * if the sales rep is between 300 and 400 (outside rep) half commission
+         * is paid now and the rest paid 14 days after recv_date (record<26>)
+         * and the order is not a credit card order
+         * 07/19/07 removed the credit calculation for 300-400 reps
+         *IF RECORD<4> > 300 AND RECORD<4> < 400 THEN
+         *  IF RECORD<44>="NC" OR RECORD<44>="" THEN LINE_COMM = RECORD<22>/2 ELSE CR="c"
+         *END
+         COMM = COMM + LINE_COMM
+         IF RECORD<21> - RECORD<20> - LOGO < RECORD<19> THEN UNDER_PAR = '^'
+         FOR I = 1 TO COUNT(RECORD<15>,@VM)+1
+           IF CALL_CENTER THEN
+             PRINT ITEM"L#3":"> ":HITS<1,Y>"L#7":OCONV(RECORD<2>,'D0/')"L#9":RECORD<13>"L#18":" ":RECORD<15,I>"R#5":" ":RECORD<16,I>"L#4":OCONV((RECORD<21,I>-RECORD<20,I>),'MD2,')"R#11":RECORD<52>"R#7"
+           END ELSE
+              *IF RECORD<4> > 300 AND RECORD<4> < 400 THEN
+              *   PRINT ITEM"L#3":"> ":HITS<1,Y>"L#7":OCONV(RECORD<2>,'D0/')"L#9":RECORD<13>"L#18":" ":CR"L#1":UNDER_PAR"L#3":RECORD<15,I>"R#5":" ":RECORD<16,I>"L#4":OCONV((RECORD<21,I>-RECORD<20,I>),'MD2,')"R#11":OCONV(LINE_COMM,'MD2,')"R#13"
+              *END ELSE
+                 PRINT ITEM"L#3":"> ":HITS<1,Y>"L#7":OCONV(RECORD<2>,'D0/')"L#9":RECORD<13>"L#18":" ":RECORD<9>"L#1":UNDER_PAR"L#3":RECORD<15,I>"R#5":" ":RECORD<16,I>"L#4":OCONV((RECORD<21,I>-RECORD<20,I>),'MD2,')"R#11":OCONV(LINE_COMM,'MD2,')"R#13"
+              *END
+           END
+           LINE_COMM = 0
+           LINE += 1
+           ITEM += 1
+         NEXT I
+         UNDER_PAR = ''
+         CR = ''
+       NEXT Y
+     END ELSE
+       MSG("No Orders were found to calculate commisions with.",'T2','','')
+     END
+
+     TOTAL_SALES = RELOAD_SALES + FRONT_SALES
+     IF CALL_CENTER THEN
+        PRINT SPACE(37):"Totals       ":OCONV(TOTAL_SALES,'MD2,')"R#11"
+     END ELSE
+        PRINT SPACE(37):"Totals           ":OCONV(TOTAL_SALES,'MD2,')"R#11":OCONV(COMM,'MD2,')"R#13"
+     END
+     LINE += 1
+     IF REPS<X> < 300 THEN
+        IF TOTAL_SALES > 0 THEN BONUS_LEVEL = ((RELOAD_SALES/TOTAL_SALES) * 100000) + 150000 ELSE BONUS_LEVEL = 150000
+        IF REPS<1,X> = 57 THEN BONUS_LEVEL = 200000
+        IF TOTAL_SALES > BONUS_LEVEL THEN
+          BONUS_SALES = TOTAL_SALES - BONUS_LEVEL - BELOW_PAR
+          IF BONUS_SALES < 0 THEN BONUS_SALES = 0
+          BONUS = (.1 * BONUS_SALES)
+        END
+        * check for takeover orders
+        STRING = '' ; @ANS = '' ; HITS = ''
+        STRING<1> = "CROSS_XREF"
+        FOR DATE  = (START) TO (END)
+          STRING := @VM:"TO*":REPS<1,X>:"*":DATE
+        NEXT DATE
+        STRING := @FM
+        BTREE.EXTRACT(STRING,"ORDERS",DICT.ORDERS,HITS)
+        IF HITS GT "" THEN
+          MSG("Calculating %1% Takeover Orders...",'T1','',COUNT(HITS,@VM)+1)
+          FOR C = 1 TO COUNT(HITS,@VM)+1
+            READV TO_AMOUNT FROM FILE.ORDERS,HITS<1,C>,33 THEN
+              TO_COMM = TO_COMM + TO_AMOUNT
+            END ELSE MSG("CANNOT READ TAKEOVER ORDER",'','','')
+          NEXT C
+        END
+        TO_AMOUNT = ''
+        IF NOT(CALL_CENTER) THEN PRINT SPACE(47):"Takeover Commissions":OCONV(TO_COMM,'MD2,')"R#11"
+        LINE +=1
+     END
+   
+   * search for chargebacks
+     STRING = '' ; @ANS = '' ; RECS = ''
+     STRING<1> = "CROSS_XREF"
+     FOR DATE  = (START) TO (END)
+       STRING := @VM:"CB*":REPS<1,X>:"*":DATE
+     NEXT DATE
+     STRING := @FM
+     BTREE.EXTRACT(STRING,"ORDERS",DICT.ORDERS,RECS)
+     IF RECS GT "" THEN
+       MSG("Calculating %1% Chargeback Orders...",'T1','',COUNT(HITS,@VM)+1)
+       A = 1
+       FOR Z = 1 TO COUNT(RECS,@VM)+1
+         READ REC FROM FILE.ORDERS,RECS<1,Z> ELSE MSG("CANNOT READ CHARGEBACK RECORD",'','','')
+         FOR Y = 1 TO COUNT(REC<27>,@VM)+1
+           IF (REC<28,Y> GE (START)) AND (REC<28,Y> LE (END)) THEN
+             CB_CODE<A> = REC<27,Y>               ; * chargeback code
+             CB_AMOUNT<A> = REC<25,Y>           ; * chargeback amount
+             CB_TOTAL = CB_TOTAL + REC<25,Y>    ; * chargeback total
+             CB_CUST<A> = REC<13>               ; * chargeback company
+             A += 1
+           END
+         NEXT Y
+       NEXT Z
+     END
+   
+   * if rep is between 300 and 400 search received date to calculate payment for
+   * orders that are 14 days past received date and the credit that should be due
+   * when 14 days is up
+     *IF REPS<1,X> > 300 AND REPS<1,X> < 400 THEN
+     *  STRING = '' ; @ANS = '' ; HITS = ''
+     *  CREDIT = 0  ; RCV_COMM = 0
+     *  STRING<1> = "CROSS_XREF"
+     *  FOR DATE  = (END1)-90 TO END1
+     *    STRING := @VM:REPS<1,X>:"*NEW*":DATE
+     *  NEXT DATE
+     *  STRING := @FM
+     *  BTREE.EXTRACT(STRING,"ORDERS",DICT.ORDERS,HITS)
+     *  IF HITS GT "" THEN
+     *    MSG("Calculating %1% orders for received payment...",'T1','',COUNT(HITS,@VM)+1)
+     *    ITEM = 0
+     *    PRINT "_______________________________________________________________________________"
+     *    PRINT "Received Payment Orders"
+   
+     *    FOR Z = 1 TO COUNT(HITS,@VM)+1
+     *      READ REC FROM FILE.ORDERS,HITS<1,Z> ELSE MSG("CANNOT READ RECEIVED ORDER",'','','')
+     *      * received date is null then payment has not been made and 1/2 of the
+     *      *commision has not yet been paid
+     *      IF REC<44> = "" OR REC<44> = "NC" THEN
+     *        IF REC<26> = "" OR REC<26>+14 >= (END) THEN
+     *          CREDIT=CREDIT+(REC<22>/2)
+     *          CR_COMM = (REC<22>/2)
+     *          FOR I = 1 TO COUNT(REC<15>,@VM)+1
+     *            CR_ITEM += 1
+     *            CR_LINE<CR_ITEM> = CR_ITEM"L#3":"> ":HITS<1,Z>"L#7":OCONV(REC<26>,'D0/')"L#9":REC<13>"L#18":" ":CR"L#1":UNDER_PAR"L#3":REC<15,I>"R#5":" ":REC<16,I>"L#4":OCONV((REC<21,I>-REC<20,I>),'MD2,')"R#11":OCONV(CR_COMM,'MD2,')"R#13"
+     *            LINE_COMM=0
+     *          NEXT I
+     *        END ELSE
+     *          IF REC<26>+14 < (END) AND REC<26>+14 >= (START) THEN
+     *            RCV_COMM = RCV_COMM + (REC<22>/2)
+     *            ITEM += 1
+     *            LINE_COMM=REC<22>/2
+     *            FOR I = 1 TO COUNT(REC<15>,@VM)+1
+     *              PRINT ITEM"L#3":"> ":HITS<1,Z>"L#7":OCONV(REC<26>,'D0/')"L#9":REC<13>"L#18":" ":CR"L#1":UNDER_PAR"L#3":REC<15,I>"R#5":" ":REC<16,I>"L#4":OCONV((REC<21,I>-REC<20,I>),'MD2,')"R#11":OCONV(LINE_COMM,'MD2,')"R#13"
+     *              LINE += 1
+     *              ITEM += 1
+     *              LINE_COMM=0
+     *            NEXT I
+     *          END
+     *        END
+     *      END
+     *    NEXT Z
+     *    PRINT "_______________________________________________________________________________" ; LINE += 1
+   
+     *    IF CR_LINE > '' THEN
+     *      PRINT "Credit Commisions"
+     *      FOR I = 1 TO COUNT(CR_LINE,@FM)+1
+     *        PRINT CR_LINE<I>
+     *        LINE += 1
+     *      NEXT I
+     *      PRINT "_______________________________________________________________________________" ; LINE += 1
+     *      LINE += 2
+     *    END
+     *  END
+     *  COMM=COMM+RCV_COMM
+     *END
+*add routine for team sales
+*for each rep we search cross2 for tl1 orders and determine the 1% of the
+*invoice total and the name of the team leader we want a total com for each
+*team leader found
+*then we look at the tl2's and do the same
+*look at reps table to determine team leader status - if team leader then
+*find out the members that are team member and the members that are leaders
+*if leader then find out what their leaders and members are.
+*we will have a list of reps that are tm's = .5 percent and tl's that are .5
+*associated with this rep
+*the index cross2 will hold for all reload orders the rep*paydate
+  PRINT "_______________________________________________________________________________"
+  STRING = '' ; @ANS = '' ; HITS = '' ; FLAG = '' ; OPTION = ''
+  STRING<1> = "CROSS2_XREF"
+  FOR DATE  = (START) TO (END)
+     STRING := @VM:"TL1*":REPS<1,X>:"*":DATE
+  NEXT DATE
+  STRING := @FM
+  OPTION<1> = "S" ; * suppress messages
+  OPTION<2> = 1   ; * begin new query
+  OPTION<3> = ''  ; * initialize set handle to null
+    BTREE.EXTRACT(STRING,"ORDERS",DICT.ORDERS,HITS,OPTION,FLAG)
+  IF HITS GT "" THEN
+    MSG("Calculating %1% orders for team level 1 sales...",'T1','',COUNT(HITS,@VM)+1)
+    ITEM = 0
+    PRINT "  Level 1 Team Sales Commission"
+    FOR Z = 1 TO COUNT(HITS,@VM)+1
+      READ REC FROM FILE.ORDERS,HITS<1,Z> ELSE MSG("CANNOT READ ORDER",'','','')
+      T1_COM += (.01 * (REC<21> - REC<20>))
+      CUR_REP = REC<4>
+      LOCATE CUR_REP IN T1REPS BY "AR" USING @FM SETTING POS THEN
+        T1REP_COM<POS> = T1REP_COM<POS> + (.01 * REC<21>)
+      END ELSE
+        T1REPS = INSERT(T1REPS,POS,0,0,CUR_REP)
+        T1REP_COM = INSERT(T1REP_COM,POS,0,0,(.01 * REC<21>))
+      END
+    NEXT Z
+    FOR Z = 1 TO COUNT(T1REPS,@FM) + 1
+      NAME = XLATE('REPS',T1REPS<Z>,1,'X'):" ":XLATE('REPS',T1REPS<Z>,2,'X')
+      PRINT SPACE(44):NAME"R#20":"    ":OCONV(T1REP_COM<Z>,'MD2,')"R#10"
+      TEAM_TOTAL += T1REP_COM<Z>
+    NEXT Z
+    PRINT "_______________________________________________________________________________"
+  END
+
+  STRING = '' ; @ANS = '' ; HITS = '' ; FLAG = '' ; OPTION = ''
+  STRING<1> = "CROSS2_XREF"
+  FOR DATE  = (START) TO (END)
+     STRING := @VM:"TL2*":REPS<1,X>:"*":DATE
+  NEXT DATE
+  STRING := @FM
+  OPTION<1> = "S" ; * suppress messages
+  OPTION<2> = 1   ; * begin new query
+  OPTION<3> = ''  ; * initialize set handle to null
+  BTREE.EXTRACT(STRING,"ORDERS",DICT.ORDERS,HITS,OPTION,FLAG)
+  IF HITS GT "" THEN
+    MSG("Calculating %1% orders for team level 2 sales...",'T1','',COUNT(HITS,@VM)+1)
+    ITEM = 0
+    *PRINT "_______________________________________________________________________________"
+    PRINT "  Level 2 Team Sales Commission"
+    FOR Z = 1 TO COUNT(HITS,@VM)+1
+      READ REC FROM FILE.ORDERS,HITS<1,Z> ELSE MSG("CANNOT READ ORDER",'','','')
+      T2_COM += (.005 * (REC<21> - REC<20>))
+      CUR_REP = REC<4>
+      LOCATE CUR_REP IN T2REPS BY "AR" USING @FM SETTING POS THEN
+        T2REP_COM<POS> = T2REP_COM<POS> + (.005 * REC<21>)
+      END ELSE
+        T2REPS = INSERT(T2REPS,POS,0,0,CUR_REP)
+        T2REP_COM = INSERT(T2REP_COM,POS,0,0,(.01 * REC<21>))
+      END
+    NEXT Z
+    FOR Z = 1 TO COUNT(T2REPS,@FM) + 1
+      NAME = XLATE('REPS',T2REPS<Z>,1,'X'):" ":XLATE('REPS',T2REPS<Z>,2,'X')
+      PRINT SPACE(44):NAME"R#20":"    ":OCONV(T2REP_COM<Z>,'MD2,')"R#10"
+      TEAM_TOTAL += T2REP_COM<Z>
+    NEXT Z
+    PRINT "_______________________________________________________________________________"
+  END
+
+     PRINT
+     LINE += 1
+   
+     TOTAL_COMM = COMM + BONUS + TO_COMM + TEAM_TOTAL
+     SALARY = XLATE('REPS',REPS<1,X>,15,'X')
+     IF SALARY = '' THEN SALARY = 0
+     WAGES = (TOTAL_COMM - CB_TOTAL) + SALARY
+   
+     *IF REPS<1,X> > 300 AND REPS<1,X> < 400 THEN
+     *   PRINT SPACE(2):"Less Chargebacks                         ||  Total Rcvd Payment Comm":OCONV(RCV_COMM,"MD2,")"R#8" ; LINE += 1
+     *   PRINT SPACE(2):"Invoice  Code  Client            Amount  ||  ":OCONV(CREDIT,"MD2,")"L#7":"Commision Credit" ; LINE += 1
+     *   PRINT SPACE(2):"_______________________________________  ||                      ==========="
+     *   PRINT SPACE(2):RECS<1,1>"L#8":CB_CODE<1>"L#4":CB_CUST<1>"L#19":OCONV(CB_AMOUNT<1>,'MD2')"R#8":"  ||  Total Commissions":OCONV(TOTAL_COMM,'MD2,')"R#14"  ; LINE += 1
+     *   PRINT SPACE(2):RECS<1,2>"L#8":CB_CODE<2>"L#4":CB_CUST<2>"L#19":OCONV(CB_AMOUNT<2>,'MD2')"R#8":"  ||                     ============" ; LINE += 1
+     *   PRINT SPACE(2):RECS<1,3>"L#8":CB_CODE<3>"L#4":CB_CUST<3>"L#19":OCONV(CB_AMOUNT<3>,'MD2')"R#8":"  ||  Total Charges":OCONV(CB_TOTAL,'MD2,')"R#18"  ; LINE += 1
+     *   PRINT SPACE(2):RECS<1,4>"L#8":CB_CODE<4>"L#4":CB_CUST<4>"L#19":OCONV(CB_AMOUNT<4>,'MD2')"R#8":"  ||  Salaried Amount":OCONV(SALARY,'MD2,')"R#16"  ; LINE += 1
+     *   PRINT SPACE(2):RECS<1,5>"L#8":CB_CODE<5>"L#4":CB_CUST<5>"L#19":OCONV(CB_AMOUNT<5>,'MD2')"R#8":"  ||                      -----------" ; LINE += 1
+     *   PRINT SPACE(2):RECS<1,6>"L#8":CB_CODE<6>"L#4":CB_CUST<6>"L#19":OCONV(CB_AMOUNT<6>,'MD2')"R#8":"  ||  Wages Before Tax":OCONV(WAGES,'MD2,$')"R#15"  ; LINE += 1
+     *   IF COUNT(CB_CODE,@FM) GT 5 THEN
+     *     FOR I = 7 TO COUNT(CB_CODE,@FM)+1
+     *       PRINT SPACE(2):RECS<1,I>"L#8":CB_CODE<I>"L#4":CB_CUST<I>"L#19":OCONV(CB_AMOUNT<I>,'MD2')"R#8":"  ||"
+     *     NEXT I
+     *   END
+     *END ELSE
+        IF NOT(CALL_CENTER) THEN
+           PRINT SPACE(2):"Less Chargebacks                         ||  Front Sales":OCONV(FRONT_SALES,'MD2,')"R#20" ; LINE += 1
+           PRINT SPACE(2):"Invoice  Code  Client            Amount  ||  Reloads    ":OCONV(RELOAD_SALES,'MD2,')"R#20" ; LINE += 1
+           PRINT SPACE(2):"_______________________________________  ||                       __________"
+           PRINT SPACE(2):RECS<1,1>"L#8":CB_CODE<1>"L#4":CB_CUST<1>"L#19":OCONV(CB_AMOUNT<1>,'MD2')"R#8":"  ||  Total Sales":OCONV(TOTAL_SALES,'MD2,')"R#20"  ; LINE += 1
+           PRINT SPACE(2):RECS<1,2>"L#8":CB_CODE<2>"L#4":CB_CUST<2>"L#19":OCONV(CB_AMOUNT<2>,'MD2')"R#8":"  ||                     ============"  ; LINE += 1
+           PRINT SPACE(2):RECS<1,3>"L#8":CB_CODE<3>"L#4":CB_CUST<3>"L#19":OCONV(CB_AMOUNT<3>,'MD2')"R#8":"  ||"  ; LINE += 1
+           PRINT SPACE(2):RECS<1,4>"L#8":CB_CODE<4>"L#4":CB_CUST<4>"L#19":OCONV(CB_AMOUNT<4>,'MD2')"R#8":"  ||  Bonus Level":OCONV(BONUS_LEVEL,'MD2,')"R#20"  ; LINE += 1
+           PRINT SPACE(2):RECS<1,5>"L#8":CB_CODE<5>"L#4":CB_CUST<5>"L#19":OCONV(CB_AMOUNT<5>,'MD2')"R#8":"  ||  Below Par  ":OCONV(BELOW_PAR,'MD2,')"R#20"  ; LINE += 1
+           PRINT SPACE(2):RECS<1,6>"L#8":CB_CODE<6>"L#4":CB_CUST<6>"L#19":OCONV(CB_AMOUNT<6>,'MD2')"R#8":"  ||  Bonus Sales":OCONV(BONUS_SALES,'MD2,')"R#20"  ; LINE += 1
+           PRINT SPACE(2):RECS<1,7>"L#8":CB_CODE<7>"L#4":CB_CUST<7>"L#19":OCONV(CB_AMOUNT<7>,'MD2')"R#8":"  ||                     ============" ; LINE += 1
+           PRINT SPACE(2):RECS<1,8>"L#8":CB_CODE<8>"L#4":CB_CUST<8>"L#19":OCONV(CB_AMOUNT<8>,'MD2')"R#8":"  ||  Commissions":OCONV(COMM,'MD2,')"R#20"  ; LINE += 1
+           PRINT SPACE(2):RECS<1,9>"L#8":CB_CODE<9>"L#4":CB_CUST<9>"L#19":OCONV(CB_AMOUNT<9>,'MD2')"R#8":"  ||  Bonuses    ":OCONV(BONUS,'MD2,')"R#20"  ; LINE += 1
+           PRINT SPACE(2):RECS<1,10>"L#8":CB_CODE<10>"L#4":CB_CUST<10>"L#19":OCONV(CB_AMOUNT<10>,'MD2')"R#8":"  ||  Team Commissions":OCONV(TEAM_TOTAL,'MD2,')"R#15"  ; LINE += 1
+
+           PRINT SPACE(2):RECS<1,11>"L#8":CB_CODE<11>"L#4":CB_CUST<11>"L#19":OCONV(CB_AMOUNT<11>,'MD2')"R#8":"  ||  Total Commissions":OCONV(TOTAL_COMM,'MD2,')"R#14"  ; LINE += 1
+           PRINT SPACE(2):RECS<1,12>"L#8":CB_CODE<12>"L#4":CB_CUST<12>"L#19":OCONV(CB_AMOUNT<12>,'MD2')"R#8":"  ||                     ============" ; LINE += 1
+           PRINT SPACE(2):RECS<1,13>"L#8":CB_CODE<13>"L#4":CB_CUST<13>"L#19":OCONV(CB_AMOUNT<13>,'MD2')"R#8":"  ||  Total Charges":OCONV(CB_TOTAL,'MD2,')"R#18"  ; LINE += 1
+           PRINT SPACE(2):RECS<1,14>"L#8":CB_CODE<14>"L#4":CB_CUST<14>"L#19":OCONV(CB_AMOUNT<14>,'MD2')"R#8":"  ||  Salaried Amount":OCONV(SALARY,'MD2,')"R#16"  ; LINE += 1
+           PRINT SPACE(2):RECS<1,15>"L#8":CB_CODE<15>"L#4":CB_CUST<15>"L#19":OCONV(CB_AMOUNT<15>,'MD2')"R#8":"  ||                      -----------" ; LINE += 1
+           PRINT SPACE(2):RECS<1,16>"L#8":CB_CODE<16>"L#4":CB_CUST<16>"L#19":OCONV(CB_AMOUNT<16>,'MD2')"R#8":"  ||  Wages Before Tax":OCONV(WAGES,'MD2,$')"R#15"  ; LINE += 1
+           IF COUNT(CB_CODE,@FM) GT 14 THEN
+             FOR I = 16 TO COUNT(CB_CODE,@FM)+1
+               PRINT SPACE(2):RECS<1,I>"L#8":CB_CODE<I>"L#4":CB_CUST<I>"L#19":OCONV(CB_AMOUNT<I>,'MD2')"R#8":"  ||"
+             NEXT I
+           END
+        END
+     *END
+     IF NOT(CALL_CENTER) THEN
+        PRINT
+        PRINT "RS - Reship            RC - Returned Check     CO - Cancelled Order"
+        PRINT "AJ - Adjusted Sale     SR - Salvage Reversal   MS - Misc. Charge"
+        PRINT "MC - Merchandise Chrg  CR - Bad Check Reversal AF - Air Freight Charge"
+     END
+  END
+NEXTREP:
+
+NEXT X
+
+IF OUTPUT NE 'P' THEN PRINT 'press enter to continue'; INPUT ANS ELSE PRINT CHAR(12) ; PRINTER OFF
+STOP
+
+HEADING:
+  NAME = XLATE('REPS',REPS<1,X>,1,'X')
+  NAME := " ":XLATE('REPS',REPS<1,X>,2,'X')
+  IF CALL_CENTER THEN PRINT SPACE(10):"Statement of Sales from ":OCONV(START,'D2/'):" to ":OCONV(END,'D2/')
+  IF NOT(CALL_CENTER) THEN PRINT SPACE(10):"Statement of Commissions from ":OCONV(START,'D2/'):" to ":OCONV(END,'D2/')
+  PRINT
+  PRINT SPACE(5):NAME"L#40":"Page ":PAGE
+  PRINT "_______________________________________________________________________________"
+*  IF REPS<1,X> > 300 AND REPS<1,X> < 500 THEN
+*     PRINT SPACE(5):"Inv #  Date     Client             Crd   Qty Item    Amount     Comm."
+*  END ELSE
+     IF CALL_CENTER THEN PRINT SPACE(5):"Inv #  Date     Client               Qty Item     Amount   Salesperson"
+     IF NOT(CALL_CENTER) THEN PRINT SPACE(5):"Inv #  Date     Client             R/F   Qty Item    Amount     Comm."
+*  END
+  PRINT "_______________________________________________________________________________"
+  LINE = 6
+RETURN

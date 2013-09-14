@@ -1,0 +1,20 @@
+/*db.connect(function(err) {
+  if (err) throw err;
+  //connected! (unless `err` is set)
+  
+  console.log('Connected, I think...');
+}); */
+
+/*db.query('SELECT 1+1 AS solution', function(err, rows, fields) {
+  if (err) throw err;
+
+  console.log('The solution is: ', rows[0].solution, ' so MySQL must be working!');
+}); */
+
+/*db.end(function(err){
+  if (err) throw err;
+
+  console.log('Test Connection Ended');
+});*/
+
+// Configuration
