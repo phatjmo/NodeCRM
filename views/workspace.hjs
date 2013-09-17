@@ -14,12 +14,13 @@
         function switchWin (win,source) {
             showWin = document.getElementById(win);
             if ($(showWin).is(':visible')) {
-                showWin.style.display="none";
+                //showWin.style.display="none";
+                $(showWin).slideUp();
                 source.innerText = source.innerText.replace("Hide","Show");
                 //alert("Hidden");
-            }
-            else {
-                showWin.style.display ="inherit";
+            } else {
+                //showWin.style.display ="inherit";
+                $(showWin).show( "slow" );
                 source.innerText = source.innerText.replace("Show","Hide");
                 //alert("Shown");
             };
@@ -33,10 +34,52 @@
         }
         function hideMe(win){
             hideWin = document.getElementById(win);
-            hideWin.style.display="none";
+            $(hideWin).slideUp( "fast" );
+            //$(hideWin).fadeToggle();
+
+        }
+        function popWin(win) {
+
+            showWin = document.getElementById(win);
+            if ($(showWin).is(':visible')) {
+                showWin.style.display="none";
+            } else {
+                showWin.style.display ="inherit";
+            };
+        }
+
+        function saveData() {
+            var activeForm = "";
+            $('form').each(function (i) {
+                console.log($( this ).prop('id') + ' selected...');
+                if ($(this).is(':visible')) {
+                    console.log($( this ).prop('id') + " is visible!");
+                    activeForm = $( this ).prop('id'); 
+                    console.log(activeForm + " is the active form!")
+                } else {
+                    console.log($( this ).prop('id') + " is NOT visible!");
+                }
+                
+            });
+            if (activeForm != "") {
+                console.log(activeForm + " is not empty")
+                processForm(activeForm);
+            } else {
+                console.log(activeForm + " is empty")
+            }
 
         }
 
+        function processForm (form) {
+            //alert(form);
+            var procForm = "#" + form;
+            $(procForm + " input").each(function(i) {
+                console.log($(this).prop("id") + " is in form:" + form);
+                var inputField = $(this).prop("id");
+                console.log($(procForm + " #" + inputField).val());
+                //$(procForm + " #" + inputField).val("fucker");
+            });
+        }
 
         //-->
     </script>
@@ -70,99 +113,102 @@
   
  <div class="windowpane">
     <!-- {{> window}} -->
+
+<!-- Main Customer Window -->
     <div class="window" id="main_cust">
-    	<form name="frmCust">
+    	<form id="frmCust">
         <fieldset class="entry full">
     	<legend>Customer Entry Window</legend>
+        <div class="close">[<a onClick="hideMe('main_cust');">X</a>]</div>
     	<ul class="left">
     		<li><label>Phone</label>	
-    			<input type=text name='phone'>
+    			<input type=text id='phone'>
     		</li>
     		<li><label>SIC #</label>
-    			<input type="text" name="sicnum">
+    			<input type="text" id="sicnum">
     			<label>CPM SRC</label>
-    			<input type="text" name="cpmSrc" size="2">
+    			<input type="text" id="cpmSrc" size="2">
     		</li>
     		<li><label>Name</label>
-    			<input type="text" name="name">
+    			<input type="text" id="name">
     		</li>
     		<li>	<label>Company</label>
-    			<input type="text" name="company">
+    			<input type="text" id="company">
     		</li>
-    		<li>	<label>Address</label><input type="text" name="address1"><br>
-    			<input type="text" name="address2">
+    		<li>	<label>Address</label><input type="text" id="address1"><br>
+    			<input type="text" id="address2">
     		</li>
     		<li><label>City</label>
-    			<input type="text" name="city" size="10">
+    			<input type="text" id="city" size="10">
     			<label>State</label>
-    			<input type="text" name="state" size="1">
+    			<input type="text" id="state" size="1">
     			<label>Zip</label>
-    			<input type="text" name="zip" size="2">
+    			<input type="text" id="zip" size="2">
     		</li>
     		<li><label>Email</label>
-    			<input type="text" name="email" size="24">
+    			<input type="text" id="email" size="24">
     			<label>Res</label>
-    			<input type="text" name="res" size="1">
+    			<input type="text" id="res" size="1">
     		</li>
     		<li>	<label>Web</label>
-    			<input type="text" name="web">
+    			<input type="text" id="web">
     		</li>
     	    <!--<li><hr></li>-->
     		<li><div class="multiline">
     				<label>Order history</label><br>
-    				<textarea name="orderhist"></textarea>
+    				<textarea id="orderhist"></textarea>
     			</div>
     		</li>
     		<li><div class="multiline">	
     				<label>Notes</label><br>
-    				<textarea name="notes"></textarea>
+    				<textarea id="notes"></textarea>
     			</div>
     		</li>
 			</ul>
 
 			<ul class="right">
     		<li><label>Salesprsn</label>	
-    			<input type=text name='salesprsn'>
+    			<input type=text id='salesprsn'>
     		</li>
     		<li><label>Fax phone</label>
-    			<input type="text" name="fax">
+    			<input type="text" id="fax">
     		</li>
     		<li><label>Sec phone</label>
-    			<input type="text" name="sec">
+    			<input type="text" id="sec">
     		</li>
     		<li><label>Last Status</label>
-    			<input type="text" name="lastStat">
+    			<input type="text" id="lastStat">
     		</li>
     		<li><label>Credit #</label>
-    			<input type="text" name="ccNum">
+    			<input type="text" id="ccNum">
     		</li>
     		<li><label>&nbsp;cvc code</label>
-    			<input type="text" name="ccCVC">
+    			<input type="text" id="ccCVC">
     		</li>
     		<li><label>&nbsp;street #</label>
-    			<input type="text" name="ccStreet">
+    			<input type="text" id="ccStreet">
     			<label>zip</label>
-    			<input type="text" name="ccZip" size="1">
+    			<input type="text" id="ccZip" size="1">
     		</li>
     		<li><label>Date Rcvd</label>
-    			<input type="text" name="recvdDt">
+    			<input type="text" id="recvdDt">
     			<label>Shipd</label>
-    			<input type="text" name="shipdDt" size="2">
+    			<input type="text" id="shipdDt" size="2">
     		</li>
     		<li><label>$Amt Rcvd</label>
-    			<input type="text" name="recvdAmt">
+    			<input type="text" id="recvdAmt">
     			<label>Cycle</label>
-    			<input type="text" name="cycle" size="1">
+    			<input type="text" id="cycle" size="1">
     		</li>
     	    <!--<li><hr></li>-->
     		<li><div class="multiline">
     				<label>Ad Copy</label><br>
-    				<textarea name="orderhist"></textarea>
+    				<textarea id="orderhist"></textarea>
     			</div>
     		</li>
     		<li><div class="multiline">
     				<label>Customer History</label><br>
-    				<textarea name="notes"></textarea>
+    				<textarea id="notes"></textarea>
     			</div>
     		</li>
 			</ul>
@@ -170,65 +216,66 @@
     	</fieldset>
         </form>
     </div>
-
+<!-- Main Order Window -->
     <div class="window" id="main_order">
-        <form name="frmOrder">
+        <form id="frmOrder">
             <fieldset class="entry full">
                 <legend>Specialty Graphics Order Entry Window</legend>
+                <div class="close">[<a onClick="hideMe('main_order');">X</a>]</div>
                 <ul>
                     <li>
                         <label>Order_#</label>    
-                        <input type=text name='orderNum' size="5">
+                        <input type=text id='orderNum' size="5">
                         <label>Pay_date</label>    
-                        <input type=text name='payDt' size="5">
+                        <input type=text id='payDt' size="5">
                         <label>Order_date</label>    
-                        <input type=text name='orderDt' size="5">
+                        <input type=text id='orderDt' size="5">
                     </li>
                 </ul>
                 <ul class="left">
                     <li><label>Cust_#</label>
-                        <input type="text" name="custId" size="5">
+                        <input type="text" id="custId" size="5">
                     </li>
                     <li><label>Company</label>
-                        <input type="text" name="company">
+                        <input type="text" id="company">
                     </li>
                     <li><label>Address</label>
-                        <input type="text" name="address">
+                        <input type="text" id="address">
                     </li>
                     <li><label>CSZip</label>
-                        <input type="text" name="csZip">
+                        <input type="text" id="csZip">
                     </li>
                 </ul>
                 <ul class="left" >
                     <li><label>Name</label>
-                        <input type="text" name="name" size="3">
+                        <input type="text" id="name" size="3">
                     </li>
                     <li><label>Salespersn</label>
-                        <input type="text" name="salespersn" size="1">
+                        <input type="text" id="salespersn" size="1">
                     <li>
                         <label>T/O_rep</label>
-                        <input type="text" name="toRep" size="1">
+                        <input type="text" id="toRep" size="1">
                     </li>
                     <li>
                         <label>T/O_comm</label>
-                        <input type="text" name="toComm" size="1">
+                        <input type="text" id="toComm" size="1">
                     </li>
                 </ul>
                 <ul class="right" >
                     <li><label>Use Order Address?</label>    
-                        <input type=text name='useOrdAdd' size="1">
+                        <input type=text id='useOrdAdd' size="1">
                     </li>
                     <li><label>CustType</label>
-                        <input type="text" name="custType" size="1">
+                        <input type="text" id="custType" size="1">
                     <label>New</label>
-                        <input type="text" name="new" size="1">
+                        <input type="text" id="new" size="1">
                     <label>Cycle</label>
-                        <input type="text" name="cycle" size="1">
+                        <input type="text" id="cycle" size="1">
                     </li>
                     <li><label>PriceType</label>
-                        <input type="text" name="priceType" size="1">
+                        <input type="text" id="priceType" size="1">
                         <label>Logo</label>
-                        <input type="text" name="logo" size="1">
+                        <input type="text" id="logo" size="1">
                     </li>
                 </ul>
                 <div class="left">
@@ -244,11 +291,11 @@
                         </thead>
                         <tbody>
                         <tr>
-                            <td><input type="text" name="qty" size="1"></td>
-                            <td><input type="text" name="code" size="1"></td>
-                            <td><input type="text" name="desc" size="40"></td>
-                            <td><input type="text" name="price" size="1"></td>
-                            <td><input type="text" name="lineTotal" size="7"></td>
+                            <td><input type="text" id="qty" size="1"></td>
+                            <td><input type="text" id="code" size="1"></td>
+                            <td><input type="text" id="desc" size="40"></td>
+                            <td><input type="text" id="price" size="1"></td>
+                            <td><input type="text" id="lineTotal" size="7"></td>
                         </tr>
                         </tbody>
                     </table>
@@ -263,17 +310,17 @@
                                 <label>Invtotal</label>
                             </th> 
                             <td rowspan="3"> 
-                                <input type="text" name="spgPar" size="7"><br>
-                                <input type="text" name="shipping" size="7"><br>
-                                <input type="text" name="invTotal" size="7">                      
+                                <input type="text" id="spgPar" size="7"><br>
+                                <input type="text" id="shipping" size="7"><br>
+                                <input type="text" id="invTotal" size="7">                      
                             </td> 
                             
                             </tr>
                             <tr>
-                            <td rowspan="2"><input type="text" name="chargeBack" size="1"></td>
-                            <td rowspan="2"><input type="text" name="cbDesc"></td>
-                            <td rowspan="2"><input type="text" name="cbDate" size="5"></td>
-                            <td rowspan="2"><input type="text" name="cbAmt" size="1"></td>
+                            <td rowspan="2"><input type="text" id="chargeBack" size="1"></td>
+                            <td rowspan="2"><input type="text" id="cbDesc"></td>
+                            <td rowspan="2"><input type="text" id="cbDate" size="5"></td>
+                            <td rowspan="2"><input type="text" id="cbAmt" size="1"></td>
                             </tr>
                             <tr></tr>
                             <tfoot>
@@ -282,21 +329,21 @@
                                 <label>Order Correction +-</label><br>
                                 <div class="left">
                                 <label>CRcard</label><br>
-                                <input type="text" name="crCard" size="10">                            
+                                <input type="text" id="crCard" size="10">                            
                                 </div>
                                 <div class="right">
                                 <label>Receivd</label><br>
-                                <input type="text" name="web" class="right" size="4">
+                                <input type="text" id="web" class="right" size="4">
                                 </div>
                             
                             </td>
                                <td></td> 
                                <td colspan="3">
                                    
-                                <div class="right"><label>o/w&nbsp;</label><input type="text" name="ow" size="10"></div><br>
-                                <div class="right"><label>Orig_com&nbsp;</label><input type="text" name="origCom" size="10"></div><br>
-                                <div class="right"><label>Net_com&nbsp;</label><input type="text" name="netCom" size="10"></div><br>                            
-                                <div class="right"><label>Trackng#&nbsp;</label><input type="text" name="tracking" size="10"></div>
+                                <div class="right"><label>o/w&nbsp;</label><input type="text" id="ow" size="10"></div><br>
+                                <div class="right"><label>Orig_com&nbsp;</label><input type="text" id="origCom" size="10"></div><br>
+                                <div class="right"><label>Net_com&nbsp;</label><input type="text" id="netCom" size="10"></div><br>                            
+                                <div class="right"><label>Trackng#&nbsp;</label><input type="text" id="tracking" size="10"></div>
 
                                </td>
                                
@@ -308,127 +355,252 @@
                     </div>
                     <ul class="right slimcol">
                     <li><label>TJ Dt</label>
-                        <input type="text" name="tjDt" size="1">
+                        <input type="text" id="tjDt" size="1">
                     <li><label>TJ Resolve</label>
-                        <input type="text" name="tjResolv"size="1">
+                        <input type="text" id="tjResolv"size="1">
                     </li>
                     <li><label>Cancel</label>
-                        <input type="text" name="cancel" size="1">
+                        <input type="text" id="cancel" size="1">
                     <li>
                         <label>Actual</label>
-                        <input type="text" name="actual" size="1">
+                        <input type="text" id="actual" size="1">
                     </li>
                         <li><label>Rush</label>
-                        <input type="text" name="rush" size="1">
+                        <input type="text" id="rush" size="1">
                     <li>
                         <label>ShpVia</label>
-                        <input type="text" name="shpVia" size="1">
+                        <input type="text" id="shpVia" size="1">
                     </li>
                     <li>
                         <label>Res</label>
-                        <input type="text" name="res" size="1">
+                        <input type="text" id="res" size="1">
                     </li>
                     <li>
                         <label>Typset</label>
-                        <input type="text" name="typset" size="1">
+                        <input type="text" id="typset" size="1">
                     </li>
                     <li>
                         <label>TSD2</label>
-                        <input type="text" name="TSD2" size="1">
+                        <input type="text" id="TSD2" size="1">
                     </li>
                     <li>
                         <label>Ship</label>
-                        <input type="text" name="ship" size="1">
+                        <input type="text" id="ship" size="1">
                     </li>
                     <li>
                         <label>Return</label>
-                        <input type="text" name="return" size="1">
+                        <input type="text" id="return" size="1">
                     </li>
                     <li>
                         <label>Reship</label>
-                        <input type="text" name="reShip" size="1">
+                        <input type="text" id="reShip" size="1">
                     </li>
                     <li>
                         <label>&nbsp;Date</label>
-                        <input type="text" name="reDate" size="1">
+                        <input type="text" id="reDate" size="1">
                     </li>
                     <li>
                         <label>&nbsp;Price</label>
-                        <input type="text" name="rePrice" size="1">
+                        <input type="text" id="rePrice" size="1">
                     </li>
                     <li>
                         <label>Weight</label>
-                        <input type="text" name="weight" size="1">
+                        <input type="text" id="weight" size="1">
                     </li>
                 </ul>
                  <div class="left">
                     <label>Comments</label><br>
-                    <textarea name="comments" cols="33"></textarea>
+                    <textarea id="comments" cols="33"></textarea>
                 </div>
                 <div class="left">
                     <label>CCRepNts</label><br>
-                    <textarea name="ccRepNts" cols="33"></textarea>
+                    <textarea id="ccRepNts" cols="33"></textarea>
                 </div>
             </fieldset>
         </form>
     </div>
-
+<!-- Employee Screen -->
     <div class="window float" id="employee">
-        <form name="frmEmp">
+        <form id="frmEmp">
 
         <fieldset class="entry">
         <legend>Specialty Graphics Employee Entry Window</legend>
-        <div class="close"><a onClick="hideMe('employee');">[█]</a></div>
+        <div class="close">[<a onClick="hideMe('employee');">X</a>]</div>
         <ul>
             <li><label>Salesperson</label>    
-                <input type=text name='salespersn'>
+                <input type=text id='salespersn'>
                 <label>Start Date</label>
-                <input type="text" name="startDt">
+                <input type="text" id="startDt">
             </li>
         </ul>
         
         <div class="group">
         <ul>
             <li><label>F Name</label>
-                <input type="text" name="firstName">
+                <input type="text" id="firstName">
                 <label>Status</label>
-                <input type="text" name="status">
+                <input type="text" id="status">
             </li>
             <li><label>L Name</label>
-                <input type="text" name="company">
+                <input type="text" id="company">
                 <label>SS Num</label>
-                <input type="text" name="ssn" size="2">
+                <input type="text" id="ssn" size="2">
             </li>
-            <li><label>Address</label><input type="text" name="address1">
+            <li><label>Address</label><input type="text" id="address1">
              <label>B Date</label>
-                <input type="text" name="dob">
+                <input type="text" id="dob">
                 <br>
                 <label>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</label>
-                <input type="text" name="address2">
+                <input type="text" id="address2">
                 <label>M stat</label>
-                <input type="text" name="married">
+                <input type="text" id="married">
                
             </li>
             <li><label>City</label>
-                <input type="text" name="city" size="10">
+                <input type="text" id="city" size="10">
                 <label>State</label>
-                <input type="text" name="state" size="1">
+                <input type="text" id="state" size="1">
                 <label>Zip</label>
-                <input type="text" name="zip" size="2">
+                <input type="text" id="zip" size="2">
             </li>
         </ul>
         </div>
         <ul class="left">
             <li><label>Weekly Salary</label>    
-                <input type=text name='salary'>
+                <input type=text id='salary'>
                 <label>Office</label>
-                <input type="text" name="fax">
+                <input type="text" id="fax">
             </li>
             <li></li>
             <li><label>Team Leaders</label>
-                <input type="text" name="sec">
+                <input type="text" id="sec">
                 <label>Level</label>
-                <input type="text" name="lastStat">
+                <input type="text" id="lastStat">
+            </li>
+        </ul>
+        </fieldset>
+        </form>
+    </div>
+<!-- Products Window -->
+    <div class="window float" id="products">
+        <form id="frmProd">
+
+        <fieldset class="entry">
+        <legend>Specialty Graphics Employee Entry Window</legend>
+        <div class="close">[<a onClick="hideMe('employee');">X</a>]</div>
+        <ul>
+            <li><label>Salesperson</label>    
+                <input type=text id='salespersn'>
+                <label>Start Date</label>
+                <input type="text" id="startDt">
+            </li>
+        </ul>
+        
+        <div class="group">
+        <ul>
+            <li><label>F Name</label>
+                <input type="text" id="firstName">
+                <label>Status</label>
+                <input type="text" id="status">
+            </li>
+            <li><label>L Name</label>
+                <input type="text" id="company">
+                <label>SS Num</label>
+                <input type="text" id="ssn" size="2">
+            </li>
+            <li><label>Address</label><input type="text" id="address1">
+             <label>B Date</label>
+                <input type="text" id="dob">
+                <br>
+                <label>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</label>
+                <input type="text" id="address2">
+                <label>M stat</label>
+                <input type="text" id="married">
+               
+            </li>
+            <li><label>City</label>
+                <input type="text" id="city" size="10">
+                <label>State</label>
+                <input type="text" id="state" size="1">
+                <label>Zip</label>
+                <input type="text" id="zip" size="2">
+            </li>
+        </ul>
+        </div>
+        <ul class="left">
+            <li><label>Weekly Salary</label>    
+                <input type=text id='salary'>
+                <label>Office</label>
+                <input type="text" id="fax">
+            </li>
+            <li></li>
+            <li><label>Team Leaders</label>
+                <input type="text" id="sec">
+                <label>Level</label>
+                <input type="text" id="lastStat">
+            </li>
+        </ul>
+        </fieldset>
+        </form>
+    </div>
+
+<!-- User Window -->
+    <div class="window float" id="users">
+        <form id="frmUser">
+
+        <fieldset class="entry">
+        <legend>Specialty Graphics Employee Entry Window</legend>
+        <div class="close">[<a onClick="hideMe('employee');">X</a>]</div>
+        <ul>
+            <li><label>Salesperson</label>    
+                <input type=text id='salespersn'>
+                <label>Start Date</label>
+                <input type="text" id="startDt">
+            </li>
+        </ul>
+        
+        <div class="group">
+        <ul>
+            <li><label>F Name</label>
+                <input type="text" id="firstName">
+                <label>Status</label>
+                <input type="text" id="status">
+            </li>
+            <li><label>L Name</label>
+                <input type="text" id="company">
+                <label>SS Num</label>
+                <input type="text" id="ssn" size="2">
+            </li>
+            <li><label>Address</label><input type="text" id="address1">
+             <label>B Date</label>
+                <input type="text" id="dob">
+                <br>
+                <label>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</label>
+                <input type="text" id="address2">
+                <label>M stat</label>
+                <input type="text" id="married">
+               
+            </li>
+            <li><label>City</label>
+                <input type="text" id="city" size="10">
+                <label>State</label>
+                <input type="text" id="state" size="1">
+                <label>Zip</label>
+                <input type="text" id="zip" size="2">
+            </li>
+        </ul>
+        </div>
+        <ul class="left">
+            <li><label>Weekly Salary</label>    
+                <input type=text id='salary'>
+                <label>Office</label>
+                <input type="text" id="fax">
+            </li>
+            <li></li>
+            <li><label>Team Leaders</label>
+                <input type="text" id="sec">
+                <label>Level</label>
+                <input type="text" id="lastStat">
             </li>
         </ul>
         </fieldset>
@@ -441,10 +613,10 @@
    <!-- {{> footer}} -->
    <div class="status">
     	<ul>
-    		<li>| <a href="browse">&lt;Browse&gt;</a></li>
-    		<li>| <a href="options">&lt;Options&gt;</a></li>
-    		<li> <a href="softkeys">&lt;Softkeys&gt;</a></li>
-    		<li> <a href="save">&lt;Save&gt;</a></li>
+    		<li>| <a onclick="popWin('browse');">&lt;Browse&gt;</a></li>
+    		<li>| <a onclick="popWin('options');">&lt;Options&gt;</a></li>
+    		<li> <a onclick="popWin('softkeys');">&lt;Softkeys&gt;</a></li>
+    		<li> <a onclick="saveData();">&lt;Save&gt;</a></li>
     		<li>|       </li>
     		<li>| NL    </li>
     		<li>| 2		</li>
@@ -477,7 +649,7 @@
 <span style="color:rgb(175 , 175 , 214);">▒</span><span style="color:rgb(118 , 117 , 194);">▒</span><span style="color:rgb(92 , 87 , 183);">▓</span><span style="color:rgb(102 , 96 , 186);">▒</span><span style="color:rgb(108 , 103 , 188);">▒</span><span style="color:rgb(99 , 94 , 184);">▓</span><span style="color:rgb(92 , 86 , 181);">▓</span><span style="color:rgb(92 , 86 , 181);">▓</span><span style="color:rgb(88 , 82 , 180);">▓</span><span style="color:rgb(74 , 67 , 174);">▓</span><span style="color:rgb(52 , 44 , 167);">▓</span><span style="color:rgb(52 , 44 , 166);">▓</span><span style="color:rgb(101 , 95 , 184);">▓</span><span style="color:rgb(159 , 158 , 207);">▒</span><span style="color:rgb(180 , 179 , 215);">░</span><span style="color:rgb(161 , 160 , 209);">▒</span><span style="color:rgb(100 , 98 , 187);">▒</span><span style="color:rgb(50 , 46 , 168);">▓</span><span style="color:rgb(137 , 134 , 199);">▒</span><span style="color:rgb(128 , 125 , 196);">▒</span><span style="color:rgb(109 , 105 , 188);">▒</span><span style="color:rgb(133 , 131 , 198);">▒</span><span style="color:rgb(163 , 164 , 210);">▒</span><span style="color:rgb(171 , 170 , 213);">▒</span><span style="color:rgb(131 , 129 , 198);">▒</span><span style="color:rgb(71 , 67 , 176);">▓</span><span style="color:rgb(123 , 120 , 194);">▒</span><span style="color:rgb(187 , 187 , 217);">░</span><span style="color:rgb(212 , 213 , 227);">░</span><span style="color:rgb(183 , 182 , 216);">░</span><span style="color:rgb(141 , 139 , 200);">▒</span><span style="color:rgb(126 , 123 , 195);">▒</span><span style="color:rgb(98 , 93 , 184);">▓</span><span style="color:rgb(81 , 77 , 178);">▓</span><span style="color:rgb(143 , 141 , 201);">▒</span><span style="color:rgb(226 , 228 , 233);">░</span><span style="color:rgb(202 , 203 , 224);">░</span><span style="color:rgb(175 , 174 , 213);">▒</span><span style="color:rgb(139 , 136 , 199);">▒</span><span style="color:rgb(89 , 85 , 181);">▓</span><span style="color:rgb(48 , 46 , 167);">▓</span><span style="color:rgb(77 , 76 , 179);">▓</span><span style="color:rgb(154 , 155 , 207);">▒</span><span style="color:rgb(172 , 171 , 213);">▒</span><span style="color:rgb(105 , 101 , 188);">▒</span><span style="color:rgb(94 , 93 , 184);">▓</span><span style="color:rgb(148 , 149 , 204);">▒</span><span style="color:rgb(162 , 161 , 208);">▒</span><span style="color:rgb(122 , 118 , 193);">▒</span><span style="color:rgb(119 , 115 , 192);">▒</span><span style="color:rgb(98 , 97 , 186);">▓</span><span style="color:rgb(62 , 63 , 174);">▓</span><span style="color:rgb(137 , 135 , 200);">▒</span><span style="color:rgb(122 , 118 , 193);">▒</span><span style="color:rgb(111 , 107 , 189);">▒</span><span style="color:rgb(86 , 82 , 180);">▓</span><span style="color:rgb(86 , 82 , 180);">▓</span><span style="color:rgb(163 , 163 , 209);">▒</span><span style="color:rgb(213 , 215 , 228);">░</span><span style="color:rgb(179 , 177 , 215);">▒</span><span style="color:rgb(132 , 129 , 198);">▒</span><span style="color:rgb(58 , 50 , 168);">▓</span><span style="color:rgb(73 , 67 , 174);">▓</span><span style="color:rgb(166 , 164 , 210);">▒</span><span style="color:rgb(214 , 215 , 228);">░</span><span style="color:rgb(186 , 186 , 217);">░</span><span style="color:rgb(148 , 145 , 202);">▒</span><span style="color:rgb(109 , 105 , 188);">▒</span><span style="color:rgb(65 , 60 , 172);">▓</span><span style="color:rgb(96 , 95 , 186);">▓</span><span style="color:rgb(118 , 116 , 193);">▒</span><span style="color:rgb(95 , 92 , 184);">▓</span><span style="color:rgb(61 , 56 , 171);">▓</span><span style="color:rgb(80 , 77 , 180);">▓</span><span style="color:rgb(114 , 112 , 192);">▒</span><span style="color:rgb(114 , 110 , 191);">▒</span><span style="color:rgb(144 , 141 , 202);">▒</span><span style="color:rgb(208 , 209 , 226);">░</span><span style="color:rgb(238 , 240 , 237);">░</span><span style="color:rgb(238 , 240 , 237);">░</span><span style="color:rgb(238 , 240 , 237);">░</span><span style="color:rgb(238 , 240 , 237);">░</span><span style="color:rgb(238 , 240 , 237);">░</span><span style="color:rgb(227 , 229 , 233);">░</span><span style="color:rgb(179 , 177 , 215);">▒</span><span style="color:rgb(103 , 98 , 186);">▒</span><span style="color:rgb(71 , 64 , 174);">▓</span><span style="color:rgb(93 , 87 , 182);">▓</span><span style="color:rgb(98 , 94 , 185);">▓</span><span style="color:rgb(129 , 127 , 197);">▒</span><span style="color:rgb(173 , 173 , 213);">▒</span><span style="color:rgb(154 , 154 , 206);">▒</span><span style="color:rgb(77 , 72 , 176);">▓</span><span style="color:rgb(43 , 36 , 163);">▓</span><span style="color:rgb(67 , 62 , 173);">▓</span><span style="color:rgb(115 , 112 , 191);">▒</span><span style="color:rgb(122 , 118 , 193);">▒</span><span style="color:rgb(173 , 172 , 212);">▒</span><span style="color:rgb(225 , 226 , 228);">░</span><span style="color:rgb(196 , 196 , 204);">░</span><span style="color:rgb(123 , 119 , 151);">▒</span><span style="color:rgb(122 , 119 , 116);">▓</span><span style="color:rgb(172 , 173 , 95);">▒</span><span style="color:rgb(193 , 195 , 80);">▒</span><span style="color:rgb(208 , 209 , 48);">▒</span><span style="color:rgb(206 , 205 , 79);">▒</span><span style="color:rgb(218 , 217 , 138);">▒</span><span style="color:rgb(199 , 200 , 165);">▒</span><span style="color:rgb(169 , 170 , 157);">▒</span><span style="color:rgb(181 , 181 , 105);">▒</span><span style="color:rgb(194 , 193 , 53);">▒</span><span style="color:rgb(190 , 189 , 57);">▒</span><span style="color:rgb(180 , 178 , 133);">▒</span><span style="color:rgb(145 , 143 , 162);">▒</span><span style="color:rgb(140 , 140 , 189);">▒</span><span style="color:rgb(135 , 132 , 197);">▒</span><span style="color:rgb(74 , 67 , 174);">▓</span><span style="color:rgb(44 , 36 , 163);">▓</span><span style="color:rgb(94 , 89 , 182);">▓</span><span style="color:rgb(134 , 130 , 197);">▒</span><span style="color:rgb(99 , 93 , 184);">▓</span><span style="color:rgb(124 , 120 , 193);">▒</span><span style="color:rgb(148 , 145 , 202);">▒</span><span style="color:rgb(112 , 107 , 189);">▒</span><span style="color:rgb(74 , 69 , 176);">▓</span><span style="color:rgb(48 , 43 , 166);">▓</span><span style="color:rgb(51 , 48 , 168);">▓</span><span style="color:rgb(100 , 102 , 187);">▒</span><span style="color:rgb(146 , 149 , 205);">▒</span><span style="color:rgb(120 , 120 , 196);">▒</span><span style="color:rgb(124 , 120 , 194);">▒</span><span style="color:rgb(152 , 149 , 204);">▒</span><span style="color:rgb(131 , 126 , 196);">▒</span><span style="color:rgb(101 , 95 , 185);">▓</span><span style="color:rgb(63 , 58 , 171);">▓</span><span style="color:rgb(83 , 81 , 180);">▓</span><span style="color:rgb(157 , 159 , 209);">▒</span><span style="color:rgb(190 , 192 , 220);">░</span><span style="color:rgb(138 , 136 , 200);">▒</span><span style="color:rgb(89 , 86 , 182);">▓</span><span style="color:rgb(86 , 83 , 181);">▓</span><span style="color:rgb(160 , 161 , 209);">▒</span><span style="color:rgb(224 , 227 , 232);">░</span><span style="color:rgb(225 , 227 , 232);">░</span><span style="color:rgb(182 , 184 , 217);">░</span><span style="color:rgb(121 , 122 , 196);">▒</span><span style="color:rgb(72 , 69 , 177);">▓</span><span style="color:rgb(81 , 73 , 177);">▓</span><span style="color:rgb(137 , 133 , 199);">▒</span><span style="color:rgb(119 , 113 , 192);">▒</span><span style="color:rgb(90 , 84 , 181);">▓</span><span style="color:rgb(133 , 131 , 198);">▒</span><span style="color:rgb(165 , 169 , 212);">▒</span><span style="color:rgb(160 , 165 , 211);">▒</span><span style="color:rgb(185 , 188 , 219);">░</span><span style="color:rgb(181 , 182 , 217);">░</span><span style="color:rgb(117 , 116 , 193);">▒</span><span style="color:rgb(107 , 103 , 188);">▒</span><span style="color:rgb(163 , 161 , 209);">▒</span><span style="color:rgb(220 , 221 , 230);">░</span><span style="color:rgb(238 , 240 , 237);">░</span><span style="color:rgb(238 , 240 , 237);">░</span><span style="color:rgb(238 , 240 , 237);">░</span><span style="color:rgb(238 , 240 , 237);">░</span><span style="color:rgb(238 , 240 , 237);">░</span><span style="color:rgb(238 , 240 , 237);">░</span><span style="color:rgb(238 , 240 , 237);">░</span><span style="color:rgb(238 , 240 , 237);">░</span><span style="color:rgb(238 , 240 , 237);">░</span><span style="color:rgb(238 , 240 , 237);">░</span><span style="color:rgb(238 , 240 , 237);">░</span><span style="color:rgb(238 , 240 , 237);">░</span><span style="color:rgb(204 , 201 , 224);">░</span><span style="color:rgb(63 , 57 , 171);">▓</span><span style="color:rgb(109 , 107 , 188);">▒</span><span style="color:rgb(199 , 199 , 222);">░</span><span style="color:rgb(209 , 209 , 226);">░</span><span style="color:rgb(129 , 125 , 197);">▒</span><span style="color:rgb(58 , 50 , 169);">▓</span><span style="color:rgb(42 , 34 , 163);">▓</span><span style="color:rgb(55 , 50 , 168);">▓</span><span style="color:rgb(48 , 42 , 166);">▓</span><span style="color:rgb(35 , 26 , 160);">▓</span><span style="color:rgb(58 , 51 , 168);">▓</span><span style="color:rgb(101 , 95 , 184);">▓</span><span style="color:rgb(105 , 100 , 186);">▒</span><span style="color:rgb(88 , 82 , 180);">▓</span><span style="color:rgb(71 , 64 , 173);">▓</span><span style="color:rgb(86 , 80 , 179);">▓</span><span style="color:rgb(166 , 164 , 210);">▒</span><span style="color:rgb(225 , 226 , 232);">░</span><span style="color:rgb(179 , 177 , 215);">▒</span><span style="color:rgb(120 , 115 , 193);">▒</span><span style="color:rgb(89 , 83 , 181);">▓</span><span style="color:rgb(122 , 118 , 193);">▒</span><span style="color:rgb(170 , 170 , 212);">▒</span><span style="color:rgb(142 , 141 , 201);">▒</span>
 <span style="color:rgb(103 , 102 , 189);">▒</span><span style="color:rgb(80 , 76 , 178);">▓</span><span style="color:rgb(51 , 46 , 166);">▓</span><span style="color:rgb(38 , 33 , 161);">▓</span><span style="color:rgb(39 , 33 , 162);">▓</span><span style="color:rgb(44 , 37 , 164);">▓</span><span style="color:rgb(58 , 51 , 170);">▓</span><span style="color:rgb(76 , 70 , 176);">▓</span><span style="color:rgb(85 , 80 , 179);">▓</span><span style="color:rgb(162 , 161 , 208);">▒</span><span style="color:rgb(188 , 188 , 218);">░</span><span style="color:rgb(203 , 203 , 223);">░</span><span style="color:rgb(227 , 228 , 232);">░</span><span style="color:rgb(226 , 228 , 233);">░</span><span style="color:rgb(179 , 181 , 216);">░</span><span style="color:rgb(115 , 116 , 193);">▒</span><span style="color:rgb(88 , 87 , 183);">▓</span><span style="color:rgb(91 , 91 , 185);">▓</span><span style="color:rgb(87 , 86 , 181);">▓</span><span style="color:rgb(84 , 86 , 179);">▓</span><span style="color:rgb(87 , 89 , 181);">▓</span><span style="color:rgb(117 , 122 , 193);">▒</span><span style="color:rgb(169 , 173 , 213);">▒</span><span style="color:rgb(206 , 206 , 226);">░</span><span style="color:rgb(218 , 219 , 230);">░</span><span style="color:rgb(184 , 184 , 217);">░</span><span style="color:rgb(69 , 65 , 174);">▓</span><span style="color:rgb(92 , 88 , 182);">▓</span><span style="color:rgb(116 , 113 , 191);">▒</span><span style="color:rgb(130 , 127 , 196);">▒</span><span style="color:rgb(177 , 176 , 214);">▒</span><span style="color:rgb(225 , 226 , 232);">░</span><span style="color:rgb(204 , 204 , 224);">░</span><span style="color:rgb(132 , 129 , 196);">▒</span><span style="color:rgb(93 , 89 , 182);">▓</span><span style="color:rgb(114 , 111 , 190);">▒</span><span style="color:rgb(125 , 122 , 195);">▒</span><span style="color:rgb(175 , 174 , 213);">▒</span><span style="color:rgb(225 , 226 , 232);">░</span><span style="color:rgb(202 , 203 , 224);">░</span><span style="color:rgb(115 , 114 , 192);">▒</span><span style="color:rgb(63 , 59 , 172);">▓</span><span style="color:rgb(77 , 74 , 178);">▓</span><span style="color:rgb(117 , 117 , 194);">▒</span><span style="color:rgb(195 , 196 , 221);">░</span><span style="color:rgb(150 , 148 , 204);">▒</span><span style="color:rgb(122 , 118 , 194);">▒</span><span style="color:rgb(132 , 129 , 198);">▒</span><span style="color:rgb(179 , 177 , 215);">▒</span><span style="color:rgb(225 , 226 , 232);">░</span><span style="color:rgb(188 , 188 , 218);">░</span><span style="color:rgb(99 , 95 , 185);">▓</span><span style="color:rgb(115 , 113 , 192);">▒</span><span style="color:rgb(176 , 176 , 214);">▒</span><span style="color:rgb(225 , 226 , 232);">░</span><span style="color:rgb(199 , 199 , 222);">░</span><span style="color:rgb(118 , 114 , 192);">▒</span><span style="color:rgb(89 , 85 , 182);">▓</span><span style="color:rgb(133 , 132 , 199);">▒</span><span style="color:rgb(175 , 174 , 213);">▒</span><span style="color:rgb(199 , 199 , 222);">░</span><span style="color:rgb(92 , 88 , 182);">▓</span><span style="color:rgb(55 , 49 , 169);">▓</span><span style="color:rgb(93 , 88 , 182);">▓</span><span style="color:rgb(119 , 116 , 192);">▒</span><span style="color:rgb(147 , 146 , 203);">▒</span><span style="color:rgb(205 , 206 , 225);">░</span><span style="color:rgb(225 , 226 , 232);">░</span><span style="color:rgb(199 , 199 , 222);">░</span><span style="color:rgb(188 , 188 , 218);">░</span><span style="color:rgb(165 , 167 , 211);">▒</span><span style="color:rgb(100 , 101 , 188);">▒</span><span style="color:rgb(56 , 52 , 170);">▓</span><span style="color:rgb(68 , 63 , 174);">▓</span><span style="color:rgb(114 , 113 , 193);">▒</span><span style="color:rgb(181 , 182 , 217);">░</span><span style="color:rgb(227 , 229 , 233);">░</span><span style="color:rgb(238 , 240 , 237);">░</span><span style="color:rgb(238 , 240 , 237);">░</span><span style="color:rgb(238 , 240 , 237);">░</span><span style="color:rgb(238 , 240 , 237);">░</span><span style="color:rgb(238 , 240 , 237);">░</span><span style="color:rgb(238 , 240 , 237);">░</span><span style="color:rgb(238 , 240 , 237);">░</span><span style="color:rgb(238 , 240 , 237);">░</span><span style="color:rgb(225 , 226 , 232);">░</span><span style="color:rgb(199 , 199 , 222);">░</span><span style="color:rgb(199 , 199 , 222);">░</span><span style="color:rgb(214 , 215 , 228);">░</span><span style="color:rgb(204 , 204 , 225);">░</span><span style="color:rgb(152 , 150 , 205);">▒</span><span style="color:rgb(75 , 70 , 176);">▓</span><span style="color:rgb(50 , 44 , 167);">▓</span><span style="color:rgb(99 , 95 , 185);">▓</span><span style="color:rgb(161 , 160 , 208);">▒</span><span style="color:rgb(225 , 226 , 232);">░</span><span style="color:rgb(238 , 240 , 237);">░</span><span style="color:rgb(238 , 240 , 237);">░</span><span style="color:rgb(238 , 240 , 237);">░</span><span style="color:rgb(200 , 201 , 223);">░</span><span style="color:rgb(124 , 122 , 194);">▒</span><span style="color:rgb(90 , 85 , 180);">▓</span><span style="color:rgb(120 , 119 , 190);">▒</span><span style="color:rgb(179 , 183 , 212);">░</span><span style="color:rgb(203 , 204 , 192);">░</span><span style="color:rgb(152 , 150 , 169);">▒</span><span style="color:rgb(151 , 147 , 181);">▒</span><span style="color:rgb(197 , 196 , 207);">░</span><span style="color:rgb(230 , 231 , 226);">░</span><span style="color:rgb(191 , 191 , 213);">░</span><span style="color:rgb(98 , 94 , 178);">▓</span><span style="color:rgb(63 , 58 , 169);">▓</span><span style="color:rgb(168 , 168 , 211);">▒</span><span style="color:rgb(196 , 196 , 221);">░</span><span style="color:rgb(155 , 153 , 206);">▒</span><span style="color:rgb(89 , 83 , 181);">▓</span><span style="color:rgb(76 , 71 , 177);">▓</span><span style="color:rgb(92 , 90 , 184);">▓</span><span style="color:rgb(93 , 92 , 185);">▓</span><span style="color:rgb(89 , 86 , 182);">▓</span><span style="color:rgb(87 , 82 , 180);">▓</span><span style="color:rgb(111 , 107 , 189);">▒</span><span style="color:rgb(161 , 159 , 207);">▒</span><span style="color:rgb(199 , 199 , 222);">░</span><span style="color:rgb(191 , 191 , 220);">░</span><span style="color:rgb(158 , 156 , 208);">▒</span><span style="color:rgb(179 , 177 , 215);">▒</span><span style="color:rgb(225 , 226 , 232);">░</span><span style="color:rgb(204 , 206 , 224);">░</span><span style="color:rgb(133 , 131 , 198);">▒</span><span style="color:rgb(109 , 105 , 188);">▒</span><span style="color:rgb(165 , 163 , 209);">▒</span><span style="color:rgb(208 , 207 , 226);">░</span><span style="color:rgb(196 , 195 , 222);">░</span><span style="color:rgb(121 , 117 , 194);">▒</span><span style="color:rgb(67 , 62 , 174);">▓</span><span style="color:rgb(76 , 73 , 177);">▓</span><span style="color:rgb(97 , 95 , 186);">▓</span><span style="color:rgb(209 , 211 , 227);">░</span><span style="color:rgb(202 , 203 , 224);">░</span><span style="color:rgb(130 , 125 , 197);">▒</span><span style="color:rgb(95 , 87 , 182);">▓</span><span style="color:rgb(107 , 106 , 187);">▒</span><span style="color:rgb(119 , 119 , 193);">▒</span><span style="color:rgb(135 , 133 , 200);">▒</span><span style="color:rgb(174 , 175 , 215);">▒</span><span style="color:rgb(179 , 180 , 216);">░</span><span style="color:rgb(85 , 82 , 180);">▓</span><span style="color:rgb(59 , 53 , 170);">▓</span><span style="color:rgb(61 , 54 , 170);">▓</span><span style="color:rgb(85 , 80 , 179);">▓</span><span style="color:rgb(120 , 118 , 193);">▒</span><span style="color:rgb(179 , 180 , 216);">░</span><span style="color:rgb(226 , 228 , 233);">░</span><span style="color:rgb(238 , 240 , 237);">░</span><span style="color:rgb(168 , 166 , 211);">▒</span><span style="color:rgb(95 , 90 , 183);">▓</span><span style="color:rgb(120 , 116 , 192);">▒</span><span style="color:rgb(203 , 203 , 223);">░</span><span style="color:rgb(238 , 240 , 237);">░</span><span style="color:rgb(238 , 240 , 237);">░</span><span style="color:rgb(238 , 240 , 237);">░</span><span style="color:rgb(238 , 240 , 237);">░</span><span style="color:rgb(238 , 240 , 237);">░</span><span style="color:rgb(238 , 240 , 237);">░</span><span style="color:rgb(238 , 240 , 237);">░</span><span style="color:rgb(238 , 240 , 237);">░</span><span style="color:rgb(238 , 240 , 237);">░</span><span style="color:rgb(238 , 240 , 237);">░</span><span style="color:rgb(238 , 240 , 237);">░</span><span style="color:rgb(238 , 240 , 237);">░</span><span style="color:rgb(202 , 203 , 223);">░</span><span style="color:rgb(118 , 114 , 192);">▒</span><span style="color:rgb(112 , 107 , 189);">▒</span><span style="color:rgb(199 , 199 , 222);">░</span><span style="color:rgb(238 , 240 , 237);">░</span><span style="color:rgb(229 , 231 , 234);">░</span><span style="color:rgb(185 , 187 , 218);">░</span><span style="color:rgb(125 , 125 , 197);">▒</span><span style="color:rgb(124 , 123 , 195);">▒</span><span style="color:rgb(179 , 179 , 215);">▒</span><span style="color:rgb(126 , 124 , 196);">▒</span><span style="color:rgb(66 , 60 , 172);">▓</span><span style="color:rgb(77 , 71 , 176);">▓</span><span style="color:rgb(121 , 119 , 193);">▒</span><span style="color:rgb(166 , 166 , 210);">▒</span><span style="color:rgb(199 , 199 , 222);">░</span><span style="color:rgb(187 , 188 , 218);">░</span><span style="color:rgb(127 , 125 , 196);">▒</span><span style="color:rgb(103 , 98 , 186);">▒</span><span style="color:rgb(122 , 118 , 193);">▒</span><span style="color:rgb(122 , 118 , 193);">▒</span><span style="color:rgb(161 , 159 , 207);">▒</span><span style="color:rgb(199 , 199 , 222);">░</span><span style="color:rgb(225 , 226 , 232);">░</span><span style="color:rgb(199 , 203 , 223);">░</span><span style="color:rgb(123 , 126 , 191);">▒</span>
 <span style="color:rgb(238 , 240 , 237);">░</span><span style="color:rgb(228 , 230 , 233);">░</span><span style="color:rgb(205 , 208 , 225);">░</span><span style="color:rgb(191 , 195 , 220);">░</span><span style="color:rgb(193 , 195 , 220);">░</span><span style="color:rgb(198 , 199 , 223);">░</span><span style="color:rgb(211 , 213 , 228);">░</span><span style="color:rgb(230 , 232 , 234);">░</span><span style="color:rgb(238 , 240 , 237);">░</span><span style="color:rgb(238 , 240 , 237);">░</span><span style="color:rgb(238 , 240 , 237);">░</span><span style="color:rgb(238 , 240 , 237);">░</span><span style="color:rgb(229 , 230 , 233);">░</span><span style="color:rgb(170 , 169 , 211);">▒</span><span style="color:rgb(81 , 76 , 178);">▓</span><span style="color:rgb(93 , 88 , 182);">▓</span><span style="color:rgb(190 , 190 , 219);">░</span><span style="color:rgb(238 , 240 , 237);">░</span><span style="color:rgb(238 , 240 , 237);">░</span><span style="color:rgb(238 , 240 , 237);">░</span><span style="color:rgb(238 , 240 , 237);">░</span><span style="color:rgb(238 , 240 , 237);">░</span><span style="color:rgb(238 , 240 , 237);">░</span><span style="color:rgb(238 , 240 , 237);">░</span><span style="color:rgb(238 , 240 , 237);">░</span><span style="color:rgb(238 , 240 , 237);">░</span><span style="color:rgb(206 , 207 , 225);">░</span><span style="color:rgb(207 , 208 , 225);">░</span><span style="color:rgb(228 , 230 , 233);">░</span><span style="color:rgb(238 , 240 , 237);">░</span><span style="color:rgb(238 , 240 , 237);">░</span><span style="color:rgb(238 , 240 , 237);">░</span><span style="color:rgb(238 , 240 , 237);">░</span><span style="color:rgb(238 , 240 , 237);">░</span><span style="color:rgb(228 , 230 , 233);">░</span><span style="color:rgb(228 , 230 , 233);">░</span><span style="color:rgb(238 , 240 , 237);">░</span><span style="color:rgb(238 , 240 , 237);">░</span><span style="color:rgb(238 , 240 , 237);">░</span><span style="color:rgb(238 , 240 , 237);">░</span><span style="color:rgb(225 , 227 , 232);">░</span><span style="color:rgb(213 , 215 , 228);">░</span><span style="color:rgb(225 , 227 , 232);">░</span><span style="color:rgb(238 , 240 , 237);">░</span><span style="color:rgb(238 , 240 , 237);">░</span><span style="color:rgb(238 , 240 , 237);">░</span><span style="color:rgb(238 , 240 , 237);">░</span><span style="color:rgb(238 , 240 , 237);">░</span><span style="color:rgb(238 , 240 , 237);">░</span><span style="color:rgb(238 , 240 , 237);">░</span><span style="color:rgb(226 , 228 , 233);">░</span><span style="color:rgb(215 , 217 , 229);">░</span><span style="color:rgb(238 , 240 , 237);">░</span><span style="color:rgb(238 , 240 , 237);">░</span><span style="color:rgb(238 , 240 , 237);">░</span><span style="color:rgb(238 , 240 , 237);">░</span><span style="color:rgb(232 , 233 , 235);">░</span><span style="color:rgb(226 , 227 , 233);">░</span><span style="color:rgb(232 , 233 , 235);">░</span><span style="color:rgb(238 , 240 , 237);">░</span><span style="color:rgb(238 , 240 , 237);">░</span><span style="color:rgb(208 , 209 , 226);">░</span><span style="color:rgb(197 , 198 , 222);">░</span><span style="color:rgb(208 , 209 , 226);">░</span><span style="color:rgb(229 , 230 , 233);">░</span><span style="color:rgb(238 , 240 , 237);">░</span><span style="color:rgb(238 , 240 , 237);">░</span><span style="color:rgb(238 , 240 , 237);">░</span><span style="color:rgb(238 , 240 , 237);">░</span><span style="color:rgb(167 , 165 , 210);">▒</span><span style="color:rgb(75 , 72 , 176);">▓</span><span style="color:rgb(46 , 47 , 167);">▓</span><span style="color:rgb(103 , 105 , 189);">▒</span><span style="color:rgb(182 , 184 , 217);">░</span><span style="color:rgb(228 , 230 , 233);">░</span><span style="color:rgb(238 , 240 , 237);">░</span><span style="color:rgb(238 , 240 , 237);">░</span><span style="color:rgb(238 , 240 , 237);">░</span><span style="color:rgb(238 , 240 , 237);">░</span><span style="color:rgb(238 , 240 , 237);">░</span><span style="color:rgb(238 , 240 , 237);">░</span><span style="color:rgb(238 , 240 , 237);">░</span><span style="color:rgb(238 , 240 , 237);">░</span><span style="color:rgb(238 , 240 , 237);">░</span><span style="color:rgb(238 , 240 , 237);">░</span><span style="color:rgb(238 , 240 , 237);">░</span><span style="color:rgb(238 , 240 , 237);">░</span><span style="color:rgb(179 , 181 , 215);">░</span><span style="color:rgb(109 , 106 , 190);">▒</span><span style="color:rgb(57 , 50 , 170);">▓</span><span style="color:rgb(52 , 46 , 168);">▓</span><span style="color:rgb(101 , 100 , 187);">▒</span><span style="color:rgb(177 , 178 , 215);">▒</span><span style="color:rgb(226 , 228 , 233);">░</span><span style="color:rgb(238 , 240 , 237);">░</span><span style="color:rgb(238 , 240 , 237);">░</span><span style="color:rgb(238 , 240 , 237);">░</span><span style="color:rgb(238 , 240 , 237);">░</span><span style="color:rgb(238 , 240 , 237);">░</span><span style="color:rgb(238 , 240 , 237);">░</span><span style="color:rgb(238 , 240 , 237);">░</span><span style="color:rgb(238 , 240 , 237);">░</span><span style="color:rgb(238 , 240 , 237);">░</span><span style="color:rgb(238 , 240 , 237);">░</span><span style="color:rgb(238 , 240 , 237);">░</span><span style="color:rgb(238 , 240 , 237);">░</span><span style="color:rgb(238 , 240 , 237);">░</span><span style="color:rgb(238 , 240 , 237);">░</span><span style="color:rgb(238 , 240 , 237);">░</span><span style="color:rgb(228 , 230 , 233);">░</span><span style="color:rgb(210 , 211 , 227);">░</span><span style="color:rgb(211 , 213 , 227);">░</span><span style="color:rgb(191 , 191 , 219);">░</span><span style="color:rgb(94 , 90 , 183);">▓</span><span style="color:rgb(62 , 55 , 171);">▓</span><span style="color:rgb(129 , 123 , 196);">▒</span><span style="color:rgb(208 , 207 , 226);">░</span><span style="color:rgb(238 , 240 , 237);">░</span><span style="color:rgb(238 , 240 , 237);">░</span><span style="color:rgb(238 , 240 , 237);">░</span><span style="color:rgb(238 , 240 , 237);">░</span><span style="color:rgb(238 , 240 , 237);">░</span><span style="color:rgb(238 , 240 , 237);">░</span><span style="color:rgb(238 , 240 , 237);">░</span><span style="color:rgb(238 , 240 , 237);">░</span><span style="color:rgb(238 , 240 , 237);">░</span><span style="color:rgb(238 , 240 , 237);">░</span><span style="color:rgb(238 , 240 , 237);">░</span><span style="color:rgb(238 , 240 , 237);">░</span><span style="color:rgb(238 , 240 , 237);">░</span><span style="color:rgb(238 , 240 , 237);">░</span><span style="color:rgb(238 , 240 , 237);">░</span><span style="color:rgb(238 , 240 , 237);">░</span><span style="color:rgb(238 , 240 , 237);">░</span><span style="color:rgb(226 , 228 , 233);">░</span><span style="color:rgb(215 , 217 , 229);">░</span><span style="color:rgb(226 , 228 , 233);">░</span><span style="color:rgb(238 , 240 , 237);">░</span><span style="color:rgb(238 , 240 , 237);">░</span><span style="color:rgb(238 , 240 , 237);">░</span><span style="color:rgb(238 , 240 , 237);">░</span><span style="color:rgb(229 , 230 , 233);">░</span><span style="color:rgb(220 , 221 , 230);">░</span><span style="color:rgb(229 , 230 , 233);">░</span><span style="color:rgb(238 , 240 , 237);">░</span><span style="color:rgb(238 , 240 , 237);">░</span><span style="color:rgb(238 , 240 , 237);">░</span><span style="color:rgb(229 , 230 , 233);">░</span><span style="color:rgb(211 , 211 , 227);">░</span><span style="color:rgb(211 , 211 , 227);">░</span><span style="color:rgb(229 , 230 , 233);">░</span><span style="color:rgb(238 , 240 , 237);">░</span><span style="color:rgb(238 , 240 , 237);">░</span><span style="color:rgb(238 , 240 , 237);">░</span><span style="color:rgb(238 , 240 , 237);">░</span><span style="color:rgb(227 , 229 , 233);">░</span><span style="color:rgb(217 , 218 , 229);">░</span><span style="color:rgb(227 , 229 , 233);">░</span><span style="color:rgb(238 , 240 , 237);">░</span><span style="color:rgb(238 , 240 , 237);">░</span><span style="color:rgb(238 , 240 , 237);">░</span><span style="color:rgb(238 , 240 , 237);">░</span><span style="color:rgb(238 , 240 , 237);">░</span><span style="color:rgb(238 , 240 , 237);">░</span><span style="color:rgb(238 , 240 , 237);">░</span><span style="color:rgb(238 , 240 , 237);">░</span><span style="color:rgb(238 , 240 , 237);">░</span><span style="color:rgb(238 , 240 , 237);">░</span><span style="color:rgb(238 , 240 , 237);">░</span><span style="color:rgb(238 , 240 , 237);">░</span><span style="color:rgb(238 , 240 , 237);">░</span><span style="color:rgb(228 , 230 , 233);">░</span><span style="color:rgb(207 , 209 , 226);">░</span><span style="color:rgb(227 , 229 , 233);">░</span><span style="color:rgb(238 , 240 , 237);">░</span><span style="color:rgb(238 , 240 , 237);">░</span><span style="color:rgb(238 , 240 , 237);">░</span><span style="color:rgb(238 , 240 , 237);">░</span><span style="color:rgb(238 , 240 , 237);">░</span><span style="color:rgb(238 , 240 , 237);">░</span><span style="color:rgb(238 , 240 , 237);">░</span><span style="color:rgb(225 , 226 , 232);">░</span><span style="color:rgb(212 , 213 , 227);">░</span><span style="color:rgb(225 , 226 , 232);">░</span><span style="color:rgb(238 , 240 , 237);">░</span><span style="color:rgb(238 , 240 , 237);">░</span><span style="color:rgb(238 , 240 , 237);">░</span><span style="color:rgb(238 , 240 , 237);">░</span><span style="color:rgb(238 , 240 , 237);">░</span><span style="color:rgb(238 , 240 , 237);">░</span><span style="color:rgb(238 , 240 , 237);">░</span><span style="color:rgb(238 , 240 , 237);">░</span><span style="color:rgb(238 , 240 , 237);">░</span><span style="color:rgb(238 , 240 , 237);">░</span><span style="color:rgb(238 , 240 , 237);">░</span><span style="color:rgb(238 , 240 , 237);">░</span><span style="color:rgb(238 , 240 , 237);">░</span>
-</pre>
+        </pre>
    </div>
   <div class="background">
     <pre>
@@ -502,7 +674,7 @@
 <span style="color:rgb(175 , 175 , 214);">▒</span><span style="color:rgb(118 , 117 , 194);">▒</span><span style="color:rgb(92 , 87 , 183);">▓</span><span style="color:rgb(102 , 96 , 186);">▒</span><span style="color:rgb(108 , 103 , 188);">▒</span><span style="color:rgb(99 , 94 , 184);">▓</span><span style="color:rgb(92 , 86 , 181);">▓</span><span style="color:rgb(92 , 86 , 181);">▓</span><span style="color:rgb(88 , 82 , 180);">▓</span><span style="color:rgb(74 , 67 , 174);">▓</span><span style="color:rgb(52 , 44 , 167);">▓</span><span style="color:rgb(52 , 44 , 166);">▓</span><span style="color:rgb(101 , 95 , 184);">▓</span><span style="color:rgb(159 , 158 , 207);">▒</span><span style="color:rgb(180 , 179 , 215);">░</span><span style="color:rgb(161 , 160 , 209);">▒</span><span style="color:rgb(100 , 98 , 187);">▒</span><span style="color:rgb(50 , 46 , 168);">▓</span><span style="color:rgb(137 , 134 , 199);">▒</span><span style="color:rgb(128 , 125 , 196);">▒</span><span style="color:rgb(109 , 105 , 188);">▒</span><span style="color:rgb(133 , 131 , 198);">▒</span><span style="color:rgb(163 , 164 , 210);">▒</span><span style="color:rgb(171 , 170 , 213);">▒</span><span style="color:rgb(131 , 129 , 198);">▒</span><span style="color:rgb(71 , 67 , 176);">▓</span><span style="color:rgb(123 , 120 , 194);">▒</span><span style="color:rgb(187 , 187 , 217);">░</span><span style="color:rgb(212 , 213 , 227);">░</span><span style="color:rgb(183 , 182 , 216);">░</span><span style="color:rgb(141 , 139 , 200);">▒</span><span style="color:rgb(126 , 123 , 195);">▒</span><span style="color:rgb(98 , 93 , 184);">▓</span><span style="color:rgb(81 , 77 , 178);">▓</span><span style="color:rgb(143 , 141 , 201);">▒</span><span style="color:rgb(226 , 228 , 233);">░</span><span style="color:rgb(202 , 203 , 224);">░</span><span style="color:rgb(175 , 174 , 213);">▒</span><span style="color:rgb(139 , 136 , 199);">▒</span><span style="color:rgb(89 , 85 , 181);">▓</span><span style="color:rgb(48 , 46 , 167);">▓</span><span style="color:rgb(77 , 76 , 179);">▓</span><span style="color:rgb(154 , 155 , 207);">▒</span><span style="color:rgb(172 , 171 , 213);">▒</span><span style="color:rgb(105 , 101 , 188);">▒</span><span style="color:rgb(94 , 93 , 184);">▓</span><span style="color:rgb(148 , 149 , 204);">▒</span><span style="color:rgb(162 , 161 , 208);">▒</span><span style="color:rgb(122 , 118 , 193);">▒</span><span style="color:rgb(119 , 115 , 192);">▒</span><span style="color:rgb(98 , 97 , 186);">▓</span><span style="color:rgb(62 , 63 , 174);">▓</span><span style="color:rgb(137 , 135 , 200);">▒</span><span style="color:rgb(122 , 118 , 193);">▒</span><span style="color:rgb(111 , 107 , 189);">▒</span><span style="color:rgb(86 , 82 , 180);">▓</span><span style="color:rgb(86 , 82 , 180);">▓</span><span style="color:rgb(163 , 163 , 209);">▒</span><span style="color:rgb(213 , 215 , 228);">░</span><span style="color:rgb(179 , 177 , 215);">▒</span><span style="color:rgb(132 , 129 , 198);">▒</span><span style="color:rgb(58 , 50 , 168);">▓</span><span style="color:rgb(73 , 67 , 174);">▓</span><span style="color:rgb(166 , 164 , 210);">▒</span><span style="color:rgb(214 , 215 , 228);">░</span><span style="color:rgb(186 , 186 , 217);">░</span><span style="color:rgb(148 , 145 , 202);">▒</span><span style="color:rgb(109 , 105 , 188);">▒</span><span style="color:rgb(65 , 60 , 172);">▓</span><span style="color:rgb(96 , 95 , 186);">▓</span><span style="color:rgb(118 , 116 , 193);">▒</span><span style="color:rgb(95 , 92 , 184);">▓</span><span style="color:rgb(61 , 56 , 171);">▓</span><span style="color:rgb(80 , 77 , 180);">▓</span><span style="color:rgb(114 , 112 , 192);">▒</span><span style="color:rgb(114 , 110 , 191);">▒</span><span style="color:rgb(144 , 141 , 202);">▒</span><span style="color:rgb(208 , 209 , 226);">░</span><span style="color:rgb(238 , 240 , 237);">░</span><span style="color:rgb(238 , 240 , 237);">░</span><span style="color:rgb(238 , 240 , 237);">░</span><span style="color:rgb(238 , 240 , 237);">░</span><span style="color:rgb(238 , 240 , 237);">░</span><span style="color:rgb(227 , 229 , 233);">░</span><span style="color:rgb(179 , 177 , 215);">▒</span><span style="color:rgb(103 , 98 , 186);">▒</span><span style="color:rgb(71 , 64 , 174);">▓</span><span style="color:rgb(93 , 87 , 182);">▓</span><span style="color:rgb(98 , 94 , 185);">▓</span><span style="color:rgb(129 , 127 , 197);">▒</span><span style="color:rgb(173 , 173 , 213);">▒</span><span style="color:rgb(154 , 154 , 206);">▒</span><span style="color:rgb(77 , 72 , 176);">▓</span><span style="color:rgb(43 , 36 , 163);">▓</span><span style="color:rgb(67 , 62 , 173);">▓</span><span style="color:rgb(115 , 112 , 191);">▒</span><span style="color:rgb(122 , 118 , 193);">▒</span><span style="color:rgb(173 , 172 , 212);">▒</span><span style="color:rgb(225 , 226 , 228);">░</span><span style="color:rgb(196 , 196 , 204);">░</span><span style="color:rgb(123 , 119 , 151);">▒</span><span style="color:rgb(122 , 119 , 116);">▓</span><span style="color:rgb(172 , 173 , 95);">▒</span><span style="color:rgb(193 , 195 , 80);">▒</span><span style="color:rgb(208 , 209 , 48);">▒</span><span style="color:rgb(206 , 205 , 79);">▒</span><span style="color:rgb(218 , 217 , 138);">▒</span><span style="color:rgb(199 , 200 , 165);">▒</span><span style="color:rgb(169 , 170 , 157);">▒</span><span style="color:rgb(181 , 181 , 105);">▒</span><span style="color:rgb(194 , 193 , 53);">▒</span><span style="color:rgb(190 , 189 , 57);">▒</span><span style="color:rgb(180 , 178 , 133);">▒</span><span style="color:rgb(145 , 143 , 162);">▒</span><span style="color:rgb(140 , 140 , 189);">▒</span><span style="color:rgb(135 , 132 , 197);">▒</span><span style="color:rgb(74 , 67 , 174);">▓</span><span style="color:rgb(44 , 36 , 163);">▓</span><span style="color:rgb(94 , 89 , 182);">▓</span><span style="color:rgb(134 , 130 , 197);">▒</span><span style="color:rgb(99 , 93 , 184);">▓</span><span style="color:rgb(124 , 120 , 193);">▒</span><span style="color:rgb(148 , 145 , 202);">▒</span><span style="color:rgb(112 , 107 , 189);">▒</span><span style="color:rgb(74 , 69 , 176);">▓</span><span style="color:rgb(48 , 43 , 166);">▓</span><span style="color:rgb(51 , 48 , 168);">▓</span><span style="color:rgb(100 , 102 , 187);">▒</span><span style="color:rgb(146 , 149 , 205);">▒</span><span style="color:rgb(120 , 120 , 196);">▒</span><span style="color:rgb(124 , 120 , 194);">▒</span><span style="color:rgb(152 , 149 , 204);">▒</span><span style="color:rgb(131 , 126 , 196);">▒</span><span style="color:rgb(101 , 95 , 185);">▓</span><span style="color:rgb(63 , 58 , 171);">▓</span><span style="color:rgb(83 , 81 , 180);">▓</span><span style="color:rgb(157 , 159 , 209);">▒</span><span style="color:rgb(190 , 192 , 220);">░</span><span style="color:rgb(138 , 136 , 200);">▒</span><span style="color:rgb(89 , 86 , 182);">▓</span><span style="color:rgb(86 , 83 , 181);">▓</span><span style="color:rgb(160 , 161 , 209);">▒</span><span style="color:rgb(224 , 227 , 232);">░</span><span style="color:rgb(225 , 227 , 232);">░</span><span style="color:rgb(182 , 184 , 217);">░</span><span style="color:rgb(121 , 122 , 196);">▒</span><span style="color:rgb(72 , 69 , 177);">▓</span><span style="color:rgb(81 , 73 , 177);">▓</span><span style="color:rgb(137 , 133 , 199);">▒</span><span style="color:rgb(119 , 113 , 192);">▒</span><span style="color:rgb(90 , 84 , 181);">▓</span><span style="color:rgb(133 , 131 , 198);">▒</span><span style="color:rgb(165 , 169 , 212);">▒</span><span style="color:rgb(160 , 165 , 211);">▒</span><span style="color:rgb(185 , 188 , 219);">░</span><span style="color:rgb(181 , 182 , 217);">░</span><span style="color:rgb(117 , 116 , 193);">▒</span><span style="color:rgb(107 , 103 , 188);">▒</span><span style="color:rgb(163 , 161 , 209);">▒</span><span style="color:rgb(220 , 221 , 230);">░</span><span style="color:rgb(238 , 240 , 237);">░</span><span style="color:rgb(238 , 240 , 237);">░</span><span style="color:rgb(238 , 240 , 237);">░</span><span style="color:rgb(238 , 240 , 237);">░</span><span style="color:rgb(238 , 240 , 237);">░</span><span style="color:rgb(238 , 240 , 237);">░</span><span style="color:rgb(238 , 240 , 237);">░</span><span style="color:rgb(238 , 240 , 237);">░</span><span style="color:rgb(238 , 240 , 237);">░</span><span style="color:rgb(238 , 240 , 237);">░</span><span style="color:rgb(238 , 240 , 237);">░</span><span style="color:rgb(238 , 240 , 237);">░</span><span style="color:rgb(204 , 201 , 224);">░</span><span style="color:rgb(63 , 57 , 171);">▓</span><span style="color:rgb(109 , 107 , 188);">▒</span><span style="color:rgb(199 , 199 , 222);">░</span><span style="color:rgb(209 , 209 , 226);">░</span><span style="color:rgb(129 , 125 , 197);">▒</span><span style="color:rgb(58 , 50 , 169);">▓</span><span style="color:rgb(42 , 34 , 163);">▓</span><span style="color:rgb(55 , 50 , 168);">▓</span><span style="color:rgb(48 , 42 , 166);">▓</span><span style="color:rgb(35 , 26 , 160);">▓</span><span style="color:rgb(58 , 51 , 168);">▓</span><span style="color:rgb(101 , 95 , 184);">▓</span><span style="color:rgb(105 , 100 , 186);">▒</span><span style="color:rgb(88 , 82 , 180);">▓</span><span style="color:rgb(71 , 64 , 173);">▓</span><span style="color:rgb(86 , 80 , 179);">▓</span><span style="color:rgb(166 , 164 , 210);">▒</span><span style="color:rgb(225 , 226 , 232);">░</span><span style="color:rgb(179 , 177 , 215);">▒</span><span style="color:rgb(120 , 115 , 193);">▒</span><span style="color:rgb(89 , 83 , 181);">▓</span><span style="color:rgb(122 , 118 , 193);">▒</span><span style="color:rgb(170 , 170 , 212);">▒</span><span style="color:rgb(142 , 141 , 201);">▒</span>
 <span style="color:rgb(103 , 102 , 189);">▒</span><span style="color:rgb(80 , 76 , 178);">▓</span><span style="color:rgb(51 , 46 , 166);">▓</span><span style="color:rgb(38 , 33 , 161);">▓</span><span style="color:rgb(39 , 33 , 162);">▓</span><span style="color:rgb(44 , 37 , 164);">▓</span><span style="color:rgb(58 , 51 , 170);">▓</span><span style="color:rgb(76 , 70 , 176);">▓</span><span style="color:rgb(85 , 80 , 179);">▓</span><span style="color:rgb(162 , 161 , 208);">▒</span><span style="color:rgb(188 , 188 , 218);">░</span><span style="color:rgb(203 , 203 , 223);">░</span><span style="color:rgb(227 , 228 , 232);">░</span><span style="color:rgb(226 , 228 , 233);">░</span><span style="color:rgb(179 , 181 , 216);">░</span><span style="color:rgb(115 , 116 , 193);">▒</span><span style="color:rgb(88 , 87 , 183);">▓</span><span style="color:rgb(91 , 91 , 185);">▓</span><span style="color:rgb(87 , 86 , 181);">▓</span><span style="color:rgb(84 , 86 , 179);">▓</span><span style="color:rgb(87 , 89 , 181);">▓</span><span style="color:rgb(117 , 122 , 193);">▒</span><span style="color:rgb(169 , 173 , 213);">▒</span><span style="color:rgb(206 , 206 , 226);">░</span><span style="color:rgb(218 , 219 , 230);">░</span><span style="color:rgb(184 , 184 , 217);">░</span><span style="color:rgb(69 , 65 , 174);">▓</span><span style="color:rgb(92 , 88 , 182);">▓</span><span style="color:rgb(116 , 113 , 191);">▒</span><span style="color:rgb(130 , 127 , 196);">▒</span><span style="color:rgb(177 , 176 , 214);">▒</span><span style="color:rgb(225 , 226 , 232);">░</span><span style="color:rgb(204 , 204 , 224);">░</span><span style="color:rgb(132 , 129 , 196);">▒</span><span style="color:rgb(93 , 89 , 182);">▓</span><span style="color:rgb(114 , 111 , 190);">▒</span><span style="color:rgb(125 , 122 , 195);">▒</span><span style="color:rgb(175 , 174 , 213);">▒</span><span style="color:rgb(225 , 226 , 232);">░</span><span style="color:rgb(202 , 203 , 224);">░</span><span style="color:rgb(115 , 114 , 192);">▒</span><span style="color:rgb(63 , 59 , 172);">▓</span><span style="color:rgb(77 , 74 , 178);">▓</span><span style="color:rgb(117 , 117 , 194);">▒</span><span style="color:rgb(195 , 196 , 221);">░</span><span style="color:rgb(150 , 148 , 204);">▒</span><span style="color:rgb(122 , 118 , 194);">▒</span><span style="color:rgb(132 , 129 , 198);">▒</span><span style="color:rgb(179 , 177 , 215);">▒</span><span style="color:rgb(225 , 226 , 232);">░</span><span style="color:rgb(188 , 188 , 218);">░</span><span style="color:rgb(99 , 95 , 185);">▓</span><span style="color:rgb(115 , 113 , 192);">▒</span><span style="color:rgb(176 , 176 , 214);">▒</span><span style="color:rgb(225 , 226 , 232);">░</span><span style="color:rgb(199 , 199 , 222);">░</span><span style="color:rgb(118 , 114 , 192);">▒</span><span style="color:rgb(89 , 85 , 182);">▓</span><span style="color:rgb(133 , 132 , 199);">▒</span><span style="color:rgb(175 , 174 , 213);">▒</span><span style="color:rgb(199 , 199 , 222);">░</span><span style="color:rgb(92 , 88 , 182);">▓</span><span style="color:rgb(55 , 49 , 169);">▓</span><span style="color:rgb(93 , 88 , 182);">▓</span><span style="color:rgb(119 , 116 , 192);">▒</span><span style="color:rgb(147 , 146 , 203);">▒</span><span style="color:rgb(205 , 206 , 225);">░</span><span style="color:rgb(225 , 226 , 232);">░</span><span style="color:rgb(199 , 199 , 222);">░</span><span style="color:rgb(188 , 188 , 218);">░</span><span style="color:rgb(165 , 167 , 211);">▒</span><span style="color:rgb(100 , 101 , 188);">▒</span><span style="color:rgb(56 , 52 , 170);">▓</span><span style="color:rgb(68 , 63 , 174);">▓</span><span style="color:rgb(114 , 113 , 193);">▒</span><span style="color:rgb(181 , 182 , 217);">░</span><span style="color:rgb(227 , 229 , 233);">░</span><span style="color:rgb(238 , 240 , 237);">░</span><span style="color:rgb(238 , 240 , 237);">░</span><span style="color:rgb(238 , 240 , 237);">░</span><span style="color:rgb(238 , 240 , 237);">░</span><span style="color:rgb(238 , 240 , 237);">░</span><span style="color:rgb(238 , 240 , 237);">░</span><span style="color:rgb(238 , 240 , 237);">░</span><span style="color:rgb(238 , 240 , 237);">░</span><span style="color:rgb(225 , 226 , 232);">░</span><span style="color:rgb(199 , 199 , 222);">░</span><span style="color:rgb(199 , 199 , 222);">░</span><span style="color:rgb(214 , 215 , 228);">░</span><span style="color:rgb(204 , 204 , 225);">░</span><span style="color:rgb(152 , 150 , 205);">▒</span><span style="color:rgb(75 , 70 , 176);">▓</span><span style="color:rgb(50 , 44 , 167);">▓</span><span style="color:rgb(99 , 95 , 185);">▓</span><span style="color:rgb(161 , 160 , 208);">▒</span><span style="color:rgb(225 , 226 , 232);">░</span><span style="color:rgb(238 , 240 , 237);">░</span><span style="color:rgb(238 , 240 , 237);">░</span><span style="color:rgb(238 , 240 , 237);">░</span><span style="color:rgb(200 , 201 , 223);">░</span><span style="color:rgb(124 , 122 , 194);">▒</span><span style="color:rgb(90 , 85 , 180);">▓</span><span style="color:rgb(120 , 119 , 190);">▒</span><span style="color:rgb(179 , 183 , 212);">░</span><span style="color:rgb(203 , 204 , 192);">░</span><span style="color:rgb(152 , 150 , 169);">▒</span><span style="color:rgb(151 , 147 , 181);">▒</span><span style="color:rgb(197 , 196 , 207);">░</span><span style="color:rgb(230 , 231 , 226);">░</span><span style="color:rgb(191 , 191 , 213);">░</span><span style="color:rgb(98 , 94 , 178);">▓</span><span style="color:rgb(63 , 58 , 169);">▓</span><span style="color:rgb(168 , 168 , 211);">▒</span><span style="color:rgb(196 , 196 , 221);">░</span><span style="color:rgb(155 , 153 , 206);">▒</span><span style="color:rgb(89 , 83 , 181);">▓</span><span style="color:rgb(76 , 71 , 177);">▓</span><span style="color:rgb(92 , 90 , 184);">▓</span><span style="color:rgb(93 , 92 , 185);">▓</span><span style="color:rgb(89 , 86 , 182);">▓</span><span style="color:rgb(87 , 82 , 180);">▓</span><span style="color:rgb(111 , 107 , 189);">▒</span><span style="color:rgb(161 , 159 , 207);">▒</span><span style="color:rgb(199 , 199 , 222);">░</span><span style="color:rgb(191 , 191 , 220);">░</span><span style="color:rgb(158 , 156 , 208);">▒</span><span style="color:rgb(179 , 177 , 215);">▒</span><span style="color:rgb(225 , 226 , 232);">░</span><span style="color:rgb(204 , 206 , 224);">░</span><span style="color:rgb(133 , 131 , 198);">▒</span><span style="color:rgb(109 , 105 , 188);">▒</span><span style="color:rgb(165 , 163 , 209);">▒</span><span style="color:rgb(208 , 207 , 226);">░</span><span style="color:rgb(196 , 195 , 222);">░</span><span style="color:rgb(121 , 117 , 194);">▒</span><span style="color:rgb(67 , 62 , 174);">▓</span><span style="color:rgb(76 , 73 , 177);">▓</span><span style="color:rgb(97 , 95 , 186);">▓</span><span style="color:rgb(209 , 211 , 227);">░</span><span style="color:rgb(202 , 203 , 224);">░</span><span style="color:rgb(130 , 125 , 197);">▒</span><span style="color:rgb(95 , 87 , 182);">▓</span><span style="color:rgb(107 , 106 , 187);">▒</span><span style="color:rgb(119 , 119 , 193);">▒</span><span style="color:rgb(135 , 133 , 200);">▒</span><span style="color:rgb(174 , 175 , 215);">▒</span><span style="color:rgb(179 , 180 , 216);">░</span><span style="color:rgb(85 , 82 , 180);">▓</span><span style="color:rgb(59 , 53 , 170);">▓</span><span style="color:rgb(61 , 54 , 170);">▓</span><span style="color:rgb(85 , 80 , 179);">▓</span><span style="color:rgb(120 , 118 , 193);">▒</span><span style="color:rgb(179 , 180 , 216);">░</span><span style="color:rgb(226 , 228 , 233);">░</span><span style="color:rgb(238 , 240 , 237);">░</span><span style="color:rgb(168 , 166 , 211);">▒</span><span style="color:rgb(95 , 90 , 183);">▓</span><span style="color:rgb(120 , 116 , 192);">▒</span><span style="color:rgb(203 , 203 , 223);">░</span><span style="color:rgb(238 , 240 , 237);">░</span><span style="color:rgb(238 , 240 , 237);">░</span><span style="color:rgb(238 , 240 , 237);">░</span><span style="color:rgb(238 , 240 , 237);">░</span><span style="color:rgb(238 , 240 , 237);">░</span><span style="color:rgb(238 , 240 , 237);">░</span><span style="color:rgb(238 , 240 , 237);">░</span><span style="color:rgb(238 , 240 , 237);">░</span><span style="color:rgb(238 , 240 , 237);">░</span><span style="color:rgb(238 , 240 , 237);">░</span><span style="color:rgb(238 , 240 , 237);">░</span><span style="color:rgb(238 , 240 , 237);">░</span><span style="color:rgb(202 , 203 , 223);">░</span><span style="color:rgb(118 , 114 , 192);">▒</span><span style="color:rgb(112 , 107 , 189);">▒</span><span style="color:rgb(199 , 199 , 222);">░</span><span style="color:rgb(238 , 240 , 237);">░</span><span style="color:rgb(229 , 231 , 234);">░</span><span style="color:rgb(185 , 187 , 218);">░</span><span style="color:rgb(125 , 125 , 197);">▒</span><span style="color:rgb(124 , 123 , 195);">▒</span><span style="color:rgb(179 , 179 , 215);">▒</span><span style="color:rgb(126 , 124 , 196);">▒</span><span style="color:rgb(66 , 60 , 172);">▓</span><span style="color:rgb(77 , 71 , 176);">▓</span><span style="color:rgb(121 , 119 , 193);">▒</span><span style="color:rgb(166 , 166 , 210);">▒</span><span style="color:rgb(199 , 199 , 222);">░</span><span style="color:rgb(187 , 188 , 218);">░</span><span style="color:rgb(127 , 125 , 196);">▒</span><span style="color:rgb(103 , 98 , 186);">▒</span><span style="color:rgb(122 , 118 , 193);">▒</span><span style="color:rgb(122 , 118 , 193);">▒</span><span style="color:rgb(161 , 159 , 207);">▒</span><span style="color:rgb(199 , 199 , 222);">░</span><span style="color:rgb(225 , 226 , 232);">░</span><span style="color:rgb(199 , 203 , 223);">░</span><span style="color:rgb(123 , 126 , 191);">▒</span>
 <span style="color:rgb(238 , 240 , 237);">░</span><span style="color:rgb(228 , 230 , 233);">░</span><span style="color:rgb(205 , 208 , 225);">░</span><span style="color:rgb(191 , 195 , 220);">░</span><span style="color:rgb(193 , 195 , 220);">░</span><span style="color:rgb(198 , 199 , 223);">░</span><span style="color:rgb(211 , 213 , 228);">░</span><span style="color:rgb(230 , 232 , 234);">░</span><span style="color:rgb(238 , 240 , 237);">░</span><span style="color:rgb(238 , 240 , 237);">░</span><span style="color:rgb(238 , 240 , 237);">░</span><span style="color:rgb(238 , 240 , 237);">░</span><span style="color:rgb(229 , 230 , 233);">░</span><span style="color:rgb(170 , 169 , 211);">▒</span><span style="color:rgb(81 , 76 , 178);">▓</span><span style="color:rgb(93 , 88 , 182);">▓</span><span style="color:rgb(190 , 190 , 219);">░</span><span style="color:rgb(238 , 240 , 237);">░</span><span style="color:rgb(238 , 240 , 237);">░</span><span style="color:rgb(238 , 240 , 237);">░</span><span style="color:rgb(238 , 240 , 237);">░</span><span style="color:rgb(238 , 240 , 237);">░</span><span style="color:rgb(238 , 240 , 237);">░</span><span style="color:rgb(238 , 240 , 237);">░</span><span style="color:rgb(238 , 240 , 237);">░</span><span style="color:rgb(238 , 240 , 237);">░</span><span style="color:rgb(206 , 207 , 225);">░</span><span style="color:rgb(207 , 208 , 225);">░</span><span style="color:rgb(228 , 230 , 233);">░</span><span style="color:rgb(238 , 240 , 237);">░</span><span style="color:rgb(238 , 240 , 237);">░</span><span style="color:rgb(238 , 240 , 237);">░</span><span style="color:rgb(238 , 240 , 237);">░</span><span style="color:rgb(238 , 240 , 237);">░</span><span style="color:rgb(228 , 230 , 233);">░</span><span style="color:rgb(228 , 230 , 233);">░</span><span style="color:rgb(238 , 240 , 237);">░</span><span style="color:rgb(238 , 240 , 237);">░</span><span style="color:rgb(238 , 240 , 237);">░</span><span style="color:rgb(238 , 240 , 237);">░</span><span style="color:rgb(225 , 227 , 232);">░</span><span style="color:rgb(213 , 215 , 228);">░</span><span style="color:rgb(225 , 227 , 232);">░</span><span style="color:rgb(238 , 240 , 237);">░</span><span style="color:rgb(238 , 240 , 237);">░</span><span style="color:rgb(238 , 240 , 237);">░</span><span style="color:rgb(238 , 240 , 237);">░</span><span style="color:rgb(238 , 240 , 237);">░</span><span style="color:rgb(238 , 240 , 237);">░</span><span style="color:rgb(238 , 240 , 237);">░</span><span style="color:rgb(226 , 228 , 233);">░</span><span style="color:rgb(215 , 217 , 229);">░</span><span style="color:rgb(238 , 240 , 237);">░</span><span style="color:rgb(238 , 240 , 237);">░</span><span style="color:rgb(238 , 240 , 237);">░</span><span style="color:rgb(238 , 240 , 237);">░</span><span style="color:rgb(232 , 233 , 235);">░</span><span style="color:rgb(226 , 227 , 233);">░</span><span style="color:rgb(232 , 233 , 235);">░</span><span style="color:rgb(238 , 240 , 237);">░</span><span style="color:rgb(238 , 240 , 237);">░</span><span style="color:rgb(208 , 209 , 226);">░</span><span style="color:rgb(197 , 198 , 222);">░</span><span style="color:rgb(208 , 209 , 226);">░</span><span style="color:rgb(229 , 230 , 233);">░</span><span style="color:rgb(238 , 240 , 237);">░</span><span style="color:rgb(238 , 240 , 237);">░</span><span style="color:rgb(238 , 240 , 237);">░</span><span style="color:rgb(238 , 240 , 237);">░</span><span style="color:rgb(167 , 165 , 210);">▒</span><span style="color:rgb(75 , 72 , 176);">▓</span><span style="color:rgb(46 , 47 , 167);">▓</span><span style="color:rgb(103 , 105 , 189);">▒</span><span style="color:rgb(182 , 184 , 217);">░</span><span style="color:rgb(228 , 230 , 233);">░</span><span style="color:rgb(238 , 240 , 237);">░</span><span style="color:rgb(238 , 240 , 237);">░</span><span style="color:rgb(238 , 240 , 237);">░</span><span style="color:rgb(238 , 240 , 237);">░</span><span style="color:rgb(238 , 240 , 237);">░</span><span style="color:rgb(238 , 240 , 237);">░</span><span style="color:rgb(238 , 240 , 237);">░</span><span style="color:rgb(238 , 240 , 237);">░</span><span style="color:rgb(238 , 240 , 237);">░</span><span style="color:rgb(238 , 240 , 237);">░</span><span style="color:rgb(238 , 240 , 237);">░</span><span style="color:rgb(238 , 240 , 237);">░</span><span style="color:rgb(179 , 181 , 215);">░</span><span style="color:rgb(109 , 106 , 190);">▒</span><span style="color:rgb(57 , 50 , 170);">▓</span><span style="color:rgb(52 , 46 , 168);">▓</span><span style="color:rgb(101 , 100 , 187);">▒</span><span style="color:rgb(177 , 178 , 215);">▒</span><span style="color:rgb(226 , 228 , 233);">░</span><span style="color:rgb(238 , 240 , 237);">░</span><span style="color:rgb(238 , 240 , 237);">░</span><span style="color:rgb(238 , 240 , 237);">░</span><span style="color:rgb(238 , 240 , 237);">░</span><span style="color:rgb(238 , 240 , 237);">░</span><span style="color:rgb(238 , 240 , 237);">░</span><span style="color:rgb(238 , 240 , 237);">░</span><span style="color:rgb(238 , 240 , 237);">░</span><span style="color:rgb(238 , 240 , 237);">░</span><span style="color:rgb(238 , 240 , 237);">░</span><span style="color:rgb(238 , 240 , 237);">░</span><span style="color:rgb(238 , 240 , 237);">░</span><span style="color:rgb(238 , 240 , 237);">░</span><span style="color:rgb(238 , 240 , 237);">░</span><span style="color:rgb(238 , 240 , 237);">░</span><span style="color:rgb(228 , 230 , 233);">░</span><span style="color:rgb(210 , 211 , 227);">░</span><span style="color:rgb(211 , 213 , 227);">░</span><span style="color:rgb(191 , 191 , 219);">░</span><span style="color:rgb(94 , 90 , 183);">▓</span><span style="color:rgb(62 , 55 , 171);">▓</span><span style="color:rgb(129 , 123 , 196);">▒</span><span style="color:rgb(208 , 207 , 226);">░</span><span style="color:rgb(238 , 240 , 237);">░</span><span style="color:rgb(238 , 240 , 237);">░</span><span style="color:rgb(238 , 240 , 237);">░</span><span style="color:rgb(238 , 240 , 237);">░</span><span style="color:rgb(238 , 240 , 237);">░</span><span style="color:rgb(238 , 240 , 237);">░</span><span style="color:rgb(238 , 240 , 237);">░</span><span style="color:rgb(238 , 240 , 237);">░</span><span style="color:rgb(238 , 240 , 237);">░</span><span style="color:rgb(238 , 240 , 237);">░</span><span style="color:rgb(238 , 240 , 237);">░</span><span style="color:rgb(238 , 240 , 237);">░</span><span style="color:rgb(238 , 240 , 237);">░</span><span style="color:rgb(238 , 240 , 237);">░</span><span style="color:rgb(238 , 240 , 237);">░</span><span style="color:rgb(238 , 240 , 237);">░</span><span style="color:rgb(238 , 240 , 237);">░</span><span style="color:rgb(226 , 228 , 233);">░</span><span style="color:rgb(215 , 217 , 229);">░</span><span style="color:rgb(226 , 228 , 233);">░</span><span style="color:rgb(238 , 240 , 237);">░</span><span style="color:rgb(238 , 240 , 237);">░</span><span style="color:rgb(238 , 240 , 237);">░</span><span style="color:rgb(238 , 240 , 237);">░</span><span style="color:rgb(229 , 230 , 233);">░</span><span style="color:rgb(220 , 221 , 230);">░</span><span style="color:rgb(229 , 230 , 233);">░</span><span style="color:rgb(238 , 240 , 237);">░</span><span style="color:rgb(238 , 240 , 237);">░</span><span style="color:rgb(238 , 240 , 237);">░</span><span style="color:rgb(229 , 230 , 233);">░</span><span style="color:rgb(211 , 211 , 227);">░</span><span style="color:rgb(211 , 211 , 227);">░</span><span style="color:rgb(229 , 230 , 233);">░</span><span style="color:rgb(238 , 240 , 237);">░</span><span style="color:rgb(238 , 240 , 237);">░</span><span style="color:rgb(238 , 240 , 237);">░</span><span style="color:rgb(238 , 240 , 237);">░</span><span style="color:rgb(227 , 229 , 233);">░</span><span style="color:rgb(217 , 218 , 229);">░</span><span style="color:rgb(227 , 229 , 233);">░</span><span style="color:rgb(238 , 240 , 237);">░</span><span style="color:rgb(238 , 240 , 237);">░</span><span style="color:rgb(238 , 240 , 237);">░</span><span style="color:rgb(238 , 240 , 237);">░</span><span style="color:rgb(238 , 240 , 237);">░</span><span style="color:rgb(238 , 240 , 237);">░</span><span style="color:rgb(238 , 240 , 237);">░</span><span style="color:rgb(238 , 240 , 237);">░</span><span style="color:rgb(238 , 240 , 237);">░</span><span style="color:rgb(238 , 240 , 237);">░</span><span style="color:rgb(238 , 240 , 237);">░</span><span style="color:rgb(238 , 240 , 237);">░</span><span style="color:rgb(238 , 240 , 237);">░</span><span style="color:rgb(228 , 230 , 233);">░</span><span style="color:rgb(207 , 209 , 226);">░</span><span style="color:rgb(227 , 229 , 233);">░</span><span style="color:rgb(238 , 240 , 237);">░</span><span style="color:rgb(238 , 240 , 237);">░</span><span style="color:rgb(238 , 240 , 237);">░</span><span style="color:rgb(238 , 240 , 237);">░</span><span style="color:rgb(238 , 240 , 237);">░</span><span style="color:rgb(238 , 240 , 237);">░</span><span style="color:rgb(238 , 240 , 237);">░</span><span style="color:rgb(225 , 226 , 232);">░</span><span style="color:rgb(212 , 213 , 227);">░</span><span style="color:rgb(225 , 226 , 232);">░</span><span style="color:rgb(238 , 240 , 237);">░</span><span style="color:rgb(238 , 240 , 237);">░</span><span style="color:rgb(238 , 240 , 237);">░</span><span style="color:rgb(238 , 240 , 237);">░</span><span style="color:rgb(238 , 240 , 237);">░</span><span style="color:rgb(238 , 240 , 237);">░</span><span style="color:rgb(238 , 240 , 237);">░</span><span style="color:rgb(238 , 240 , 237);">░</span><span style="color:rgb(238 , 240 , 237);">░</span><span style="color:rgb(238 , 240 , 237);">░</span><span style="color:rgb(238 , 240 , 237);">░</span><span style="color:rgb(238 , 240 , 237);">░</span><span style="color:rgb(238 , 240 , 237);">░</span>
-</pre>
+    </pre>
     
    </div>  
  

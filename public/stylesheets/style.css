@@ -14,7 +14,7 @@ div.workspace {
   width: 800px;
   margin: 2% 20% 20% 20%;
   height: 440px;
-  background-color: darkblue;
+  background-color: rgba(0,0,128,.9);
 
 }
 
@@ -61,11 +61,15 @@ div.workspace {
 .window {
 	/*height:370px;*/
 	position:fixed;
-	display: inline-block;
+	display: none;
+	background-color: darkblue;
 }
 
 .status {
 	position:relative;
+	width: 800px;
+	height: 20px;
+	background-color: darkblue;
 }
 
 .status ul {
@@ -223,6 +227,7 @@ div.workspace {
 	white-space:pre;
 	color: black; 
 	background: white;
+
 }
 .logo {
 	border:thick double lightgray;
@@ -271,20 +276,16 @@ div.workspace {
 	background-color: darkblue;
 	color:lightgray;
 }
-#main_cust {
-	/*visibility: hidden;*/
-	display: none;
+
+.close a {
+	color:lightgray;
+	cursor: pointer;
 }
 
-#main_order { 
-	/*visibility: hidden;*/
-	display: none;
+.close a:hover {
+	color: darkgray;
 }
 
-#employee { 
-	display: none;
-
-}
 
 .dos {
 width: 400px;
