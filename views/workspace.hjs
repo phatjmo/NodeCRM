@@ -36,15 +36,27 @@
             hideWin = document.getElementById(win);
             $(hideWin).slideUp( "fast" );
             //$(hideWin).fadeToggle();
-
+            menu = hasMenu(win);
+            console.log("Hiding " + menu);
+            if (menu != "none") {
+                hideMenu(menu);
+            };
+            popWin("mainMenu");
         }
+
+        function hideMenu(menu){
+            hideIt = document.getElementById(menu);
+            //$(hideIt).fadeToggle();
+            $(hideIt).hide( "fast" );
+        }
+
         function popWin(win) {
 
             showWin = document.getElementById(win);
             if ($(showWin).is(':visible')) {
-                showWin.style.display="none";
+               $(showWin).slideUp(); 
             } else {
-                showWin.style.display ="inherit";
+                $(showWin).show( "slow" );
             };
         }
 
@@ -80,42 +92,67 @@
                 //$(procForm + " #" + inputField).val("fucker");
             });
         }
+        function hasMenu (win) {
+            var menu = $( "#" + win ).attr("menu");
+            console.log ("Menu is " + menu);
+            return menu;
+        }
+
+        function hitMenu (win) {
+            console.log("menu(" + win + ")");
+            hideMenu("mainMenu");
+            popWin(win);
+            var menu ="";
+            menu = hasMenu(win);
+            console.log("Showing " + menu);
+            if (menu != "none") {
+                popWin(menu);
+            };
+        }
 
         //-->
     </script>
   </head>
   <body>
-<button id="btnCust" onclick="switchWin('main_cust',this);">Show Orders</button>
+<!--<button id="btnCust" onclick="switchWin('main_cust',this);">Show Orders</button>
 <button id="btnOrder"  onclick="switchWin('main_order',this);">Show Cust</button>
-<button id="btnEmp"  onclick="switchWin('employee',this);">Show Employee</button>
+<button id="btnEmp"  onclick="switchWin('employee',this);">Show Employee</button>-->
    <div class="workspace">
      <!-- {{> menu}} -->
     <div class="menu single">
-    	<ul>
-    	<!--	<li><a href="maincust">Main Cust</a></li>
-    		<li><a href="mainorders">Main Orders</a></li>
-    		<li><a href="whlslcust">Whlsl Cust</a></li>
-    		<li><a href="whlslorders">Whlsl Orders</a></li>
-    		<li><a href="asicust">ASI Cust</a></li>
-    		<li><a href="asiorders">ASI Orders</a></li>
-    		<li><a href="crporders">Crp Orders</a></li>
-    		<li><a href="products">Products</a></li>
-    		<li><a href="employees">Employees</a></li>
-    		<li><a href="admin">Administration</a></li>
-    		<li><a href="utils">Utilities</a></li>
-    		<li><a href="logoff">LogOff</a></li> -->
-    		<li><a href="loadlist">Load List</a></li>
-    		<li><a href="loadtick">Load Ticket</a></li>
-    		<li><a href="countsic">Count SIC H's</a></li>
-    		<li><a href="loadnewtick">Load Ticket New</a></li>
+    	<ul id="mainMenu">
+    	<li><a onclick="hitMenu('main_cust');">Main Cust</a></li>
+    		<li><a onclick="hitMenu('main_order');">Main Orders</a></li>
+    		<li><a onclick="hitMenu('products');">Products</a></li>
+    		<li><a onclick="hitMenu('employee');">Employees</a></li>
+    		<li><a onclick="hitMenu('admin');">Administration</a></li>
+    		<li><a onclick="hitMenu('utils');">Utilities</a></li>
+    		<li><a onclick="hitMenu('logoff');">LogOff</a></li>
     	</ul>
+   <!-- </div>-->
+
+    <!-- <div class="menu single" id="custMenu" style="display: none;"> -->
+        <ul id="custMenu" style="display:none;">
+            <li><a onclick="hitMenu('loadlist');">Load List</a></li>
+            <li><a onclick="hitMenu('loadticket');">Load Ticket</a></li>
+            <li><a onclick="hitMenu('employees');">Count SIC H's</a></li>
+            <li><a onclick="hitMenu('admin');">Load Ticket New</a></li>
+        </ul>
+    <!--</div>-->
+    <!--<div class="menu single" id="orderMenu" style="display: none;">-->
+        <ul id="orderMenu" style="display:none;">
+            <li><a onclick="hitMenu('loadlist');">Load List</a></li>
+            <li><a onclick="hitMenu('loadticket');">Load Ticket</a></li>
+            <li><a onclick="hitMenu('employees');">Count SIC H's</a></li>
+            <li><a onclick="hitMenu('admin');">Load Ticket New</a></li>
+        </ul>
     </div>
   
  <div class="windowpane">
     <!-- {{> window}} -->
 
 <!-- Main Customer Window -->
-    <div class="window" id="main_cust">
+    <div class="window" id="main_cust" menu="custMenu">
     	<form id="frmCust">
         <fieldset class="entry full">
     	<legend>Customer Entry Window</legend>
@@ -217,7 +254,7 @@
         </form>
     </div>
 <!-- Main Order Window -->
-    <div class="window" id="main_order">
+    <div class="window" id="main_order" menu="orderMenu">
         <form id="frmOrder">
             <fieldset class="entry full">
                 <legend>Specialty Graphics Order Entry Window</legend>
@@ -420,7 +457,7 @@
         </form>
     </div>
 <!-- Employee Screen -->
-    <div class="window float" id="employee">
+    <div class="window float" id="employee" menu="empMenu">
         <form id="frmEmp">
 
         <fieldset class="entry">
@@ -482,12 +519,12 @@
         </form>
     </div>
 <!-- Products Window -->
-    <div class="window float" id="products">
+    <div class="window float" id="products" menu="prodMenu">
         <form id="frmProd">
 
         <fieldset class="entry">
         <legend>Specialty Graphics Employee Entry Window</legend>
-        <div class="close">[<a onClick="hideMe('employee');">X</a>]</div>
+        <div class="close">[<a onClick="hideMe('products');">X</a>]</div>
         <ul>
             <li><label>Salesperson</label>    
                 <input type=text id='salespersn'>
@@ -550,7 +587,7 @@
 
         <fieldset class="entry">
         <legend>Specialty Graphics Employee Entry Window</legend>
-        <div class="close">[<a onClick="hideMe('employee');">X</a>]</div>
+        <div class="close">[<a onClick="hideMe('users');">X</a>]</div>
         <ul>
             <li><label>Salesperson</label>    
                 <input type=text id='salespersn'>
