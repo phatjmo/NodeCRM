@@ -5,10 +5,12 @@
    
 	
    <title>{{ title }}</title>
-    <link rel='stylesheet' href='../public/stylesheets/style.css' />
+    <link rel='stylesheet' href='stylesheets/style.css' />
+    <link rel='stylesheet' href='stylesheets/cupertino/jquery-ui-1.10.3.custom.css' />
     <meta charset="utf-8" />
     <meta http-equiv="Content-type" content="text/html; charset=utf-8" />
-    <script src="../public/javascripts/jquery-1.10.2.min.js" type="text/javascript"></script>
+    <script src="javascripts/jquery-1.10.2.min.js" type="text/javascript"></script>
+    <script src="javascripts/jquery-ui.js" type="text/javascript"></script>
     <script type="text/javascript">
         //<!--
         function switchWin (win,source) {
@@ -33,31 +35,62 @@
 
         }
         function hideMe(win){
-            hideWin = document.getElementById(win);
-            $(hideWin).slideUp( "fast" );
+            var hideWin = "#"+win;
+            //hideWin = document.getElementById(win);
+            //$(hideWin).hide( "fold", "slow" );
+            //$(hideWin).slideUp( "fast" );
             //$(hideWin).fadeToggle();
             menu = hasMenu(win);
             console.log("Hiding " + menu);
             if (menu != "none") {
                 hideMenu(menu);
             };
-            popWin("mainMenu");
+            drawMenu("mainMenu");
+            $(hideWin).hide( "fold", "slow", function() {
+               $("#windowPane").empty(); 
+            } );
+            
         }
 
         function hideMenu(menu){
-            hideIt = document.getElementById(menu);
+            hideIt = "#"+menu;
+            //hideIt = document.getElementById(menu);
             //$(hideIt).fadeToggle();
-            $(hideIt).hide( "fast" );
+            $(hideIt).hide( "slide", "fast" );
         }
 
         function popWin(win) {
+            //$("#windowpane").empty();
+            console.log("Popping Window: " + win);
+            var formFile = "partials/"+win+".hjs";
+            var showWin = "#" + win;
+            console.log("Loading Form: " + formFile);
+            $("#windowPane").load(formFile, function(responseTxt,statusTxt,xhr){
+                //console.log("Response: " + responseTxt);
+                console.log("Status: " + statusTxt);
+                if(statusTxt=="success")
+                    console.log("External content loaded successfully!");
+                    $(showWin).show( "slide", "slow");
+                    var menu ="";
+                    menu = hasMenu(win);
+                    console.log("Showing " + menu);
+                    if (menu != "none") 
+                        drawMenu(menu);
+                if(statusTxt=="error")
+                    console.log("Error: "+xhr.status+": "+xhr.statusText);
+                });
 
-            showWin = document.getElementById(win);
-            if ($(showWin).is(':visible')) {
-               $(showWin).slideUp(); 
+            /*if ($(showWin).is(':visible')) {
+               console.log(showWin + ": is Visible");
+               $(showWin).hide( "slide", "fast"); 
             } else {
-                $(showWin).show( "slow" );
-            };
+                console.log(showWin + ": is NOT Visible");
+                $(showWin).show( "slide", "slow" );
+            };*/
+        }
+        function drawMenu (menu) {
+            showMenu = "#"+menu;
+            $(showMenu).show("slide","fast");
         }
 
         function saveData() {
@@ -100,14 +133,14 @@
 
         function hitMenu (win) {
             console.log("menu(" + win + ")");
-            hideMenu("mainMenu");
             popWin(win);
-            var menu ="";
+            hideMenu("mainMenu");
+            /*var menu ="";
             menu = hasMenu(win);
             console.log("Showing " + menu);
             if (menu != "none") {
-                popWin(menu);
-            };
+                drawMenu(menu);
+            };*/
         }
 
         //-->
@@ -121,8 +154,8 @@
      <!-- {{> menu}} -->
     <div class="menu single">
     	<ul id="mainMenu">
-    	<li><a onclick="hitMenu('main_cust');">Main Cust</a></li>
-    		<li><a onclick="hitMenu('main_order');">Main Orders</a></li>
+    	<li><a onclick="hitMenu('mainCust');">Main Cust</a></li>
+    		<li><a onclick="hitMenu('mainOrder');">Main Orders</a></li>
     		<li><a onclick="hitMenu('products');">Products</a></li>
     		<li><a onclick="hitMenu('employee');">Employees</a></li>
     		<li><a onclick="hitMenu('admin');">Administration</a></li>
@@ -148,501 +181,10 @@
         </ul>
     </div>
   
- <div class="windowpane">
+ <div id="windowPane" class="windowpane">
     <!-- {{> window}} -->
+  
 
-<!-- Main Customer Window -->
-    <div class="window" id="main_cust" menu="custMenu">
-    	<form id="frmCust">
-        <fieldset class="entry full">
-    	<legend>Customer Entry Window</legend>
-        <div class="close">[<a onClick="hideMe('main_cust');">X</a>]</div>
-    	<ul class="left">
-    		<li><label>Phone</label>	
-    			<input type=text id='phone'>
-    		</li>
-    		<li><label>SIC #</label>
-    			<input type="text" id="sicnum">
-    			<label>CPM SRC</label>
-    			<input type="text" id="cpmSrc" size="2">
-    		</li>
-    		<li><label>Name</label>
-    			<input type="text" id="name">
-    		</li>
-    		<li>	<label>Company</label>
-    			<input type="text" id="company">
-    		</li>
-    		<li>	<label>Address</label><input type="text" id="address1"><br>
-    			<input type="text" id="address2">
-    		</li>
-    		<li><label>City</label>
-    			<input type="text" id="city" size="10">
-    			<label>State</label>
-    			<input type="text" id="state" size="1">
-    			<label>Zip</label>
-    			<input type="text" id="zip" size="2">
-    		</li>
-    		<li><label>Email</label>
-    			<input type="text" id="email" size="24">
-    			<label>Res</label>
-    			<input type="text" id="res" size="1">
-    		</li>
-    		<li>	<label>Web</label>
-    			<input type="text" id="web">
-    		</li>
-    	    <!--<li><hr></li>-->
-    		<li><div class="multiline">
-    				<label>Order history</label><br>
-    				<textarea id="orderhist"></textarea>
-    			</div>
-    		</li>
-    		<li><div class="multiline">	
-    				<label>Notes</label><br>
-    				<textarea id="notes"></textarea>
-    			</div>
-    		</li>
-			</ul>
-
-			<ul class="right">
-    		<li><label>Salesprsn</label>	
-    			<input type=text id='salesprsn'>
-    		</li>
-    		<li><label>Fax phone</label>
-    			<input type="text" id="fax">
-    		</li>
-    		<li><label>Sec phone</label>
-    			<input type="text" id="sec">
-    		</li>
-    		<li><label>Last Status</label>
-    			<input type="text" id="lastStat">
-    		</li>
-    		<li><label>Credit #</label>
-    			<input type="text" id="ccNum">
-    		</li>
-    		<li><label>&nbsp;cvc code</label>
-    			<input type="text" id="ccCVC">
-    		</li>
-    		<li><label>&nbsp;street #</label>
-    			<input type="text" id="ccStreet">
-    			<label>zip</label>
-    			<input type="text" id="ccZip" size="1">
-    		</li>
-    		<li><label>Date Rcvd</label>
-    			<input type="text" id="recvdDt">
-    			<label>Shipd</label>
-    			<input type="text" id="shipdDt" size="2">
-    		</li>
-    		<li><label>$Amt Rcvd</label>
-    			<input type="text" id="recvdAmt">
-    			<label>Cycle</label>
-    			<input type="text" id="cycle" size="1">
-    		</li>
-    	    <!--<li><hr></li>-->
-    		<li><div class="multiline">
-    				<label>Ad Copy</label><br>
-    				<textarea id="orderhist"></textarea>
-    			</div>
-    		</li>
-    		<li><div class="multiline">
-    				<label>Customer History</label><br>
-    				<textarea id="notes"></textarea>
-    			</div>
-    		</li>
-			</ul>
-
-    	</fieldset>
-        </form>
-    </div>
-<!-- Main Order Window -->
-    <div class="window" id="main_order" menu="orderMenu">
-        <form id="frmOrder">
-            <fieldset class="entry full">
-                <legend>Specialty Graphics Order Entry Window</legend>
-                <div class="close">[<a onClick="hideMe('main_order');">X</a>]</div>
-                <ul>
-                    <li>
-                        <label>Order_#</label>    
-                        <input type=text id='orderNum' size="5">
-                        <label>Pay_date</label>    
-                        <input type=text id='payDt' size="5">
-                        <label>Order_date</label>    
-                        <input type=text id='orderDt' size="5">
-                    </li>
-                </ul>
-                <ul class="left">
-                    <li><label>Cust_#</label>
-                        <input type="text" id="custId" size="5">
-                    </li>
-                    <li><label>Company</label>
-                        <input type="text" id="company">
-                    </li>
-                    <li><label>Address</label>
-                        <input type="text" id="address">
-                    </li>
-                    <li><label>CSZip</label>
-                        <input type="text" id="csZip">
-                    </li>
-                </ul>
-                <ul class="left" >
-                    <li><label>Name</label>
-                        <input type="text" id="name" size="3">
-                    </li>
-                    <li><label>Salespersn</label>
-                        <input type="text" id="salespersn" size="1">
-                    <li>
-                        <label>T/O_rep</label>
-                        <input type="text" id="toRep" size="1">
-                    </li>
-                    <li>
-                        <label>T/O_comm</label>
-                        <input type="text" id="toComm" size="1">
-                    </li>
-                </ul>
-                <ul class="right" >
-                    <li><label>Use Order Address?</label>    
-                        <input type=text id='useOrdAdd' size="1">
-                    </li>
-                    <li><label>CustType</label>
-                        <input type="text" id="custType" size="1">
-                    <label>New</label>
-                        <input type="text" id="new" size="1">
-                    <label>Cycle</label>
-                        <input type="text" id="cycle" size="1">
-                    </li>
-                    <li><label>PriceType</label>
-                        <input type="text" id="priceType" size="1">
-                        <label>Logo</label>
-                        <input type="text" id="logo" size="1">
-                    </li>
-                </ul>
-                <div class="left">
-                    <table id="lineItem" class="lineitem">
-                        <thead>
-                        <tr>
-                            <th><label>Qty</label></th>                        
-                            <th><label>Prod</label></th>                        
-                            <th><label>Description</label></th>                        
-                            <th><label>Price</label></th>
-                            <th><label>Line_total</label></th>
-                        </tr>
-                        </thead>
-                        <tbody>
-                        <tr>
-                            <td><input type="text" id="qty" size="1"></td>
-                            <td><input type="text" id="code" size="1"></td>
-                            <td><input type="text" id="desc" size="40"></td>
-                            <td><input type="text" id="price" size="1"></td>
-                            <td><input type="text" id="lineTotal" size="7"></td>
-                        </tr>
-                        </tbody>
-                    </table>
-                      <table id="chargeBacks" class="lineitem">
-                            <tr>
-                            <th colspan="2"><label>Chargebacks</label></th>                        
-                            <th><label>Date</label></th>                                            
-                            <th><label>$</label></th>
-                            <th rowspan="3">
-                                <label>SPG_par</label><br>
-                                <label>Shipping</label><br>
-                                <label>Invtotal</label>
-                            </th> 
-                            <td rowspan="3"> 
-                                <input type="text" id="spgPar" size="7"><br>
-                                <input type="text" id="shipping" size="7"><br>
-                                <input type="text" id="invTotal" size="7">                      
-                            </td> 
-                            
-                            </tr>
-                            <tr>
-                            <td rowspan="2"><input type="text" id="chargeBack" size="1"></td>
-                            <td rowspan="2"><input type="text" id="cbDesc"></td>
-                            <td rowspan="2"><input type="text" id="cbDate" size="5"></td>
-                            <td rowspan="2"><input type="text" id="cbAmt" size="1"></td>
-                            </tr>
-                            <tr></tr>
-                            <tfoot>
-                            <tr>
-                               <td colspan="2"><ul class="left">                            
-                                <label>Order Correction +-</label><br>
-                                <div class="left">
-                                <label>CRcard</label><br>
-                                <input type="text" id="crCard" size="10">                            
-                                </div>
-                                <div class="right">
-                                <label>Receivd</label><br>
-                                <input type="text" id="web" class="right" size="4">
-                                </div>
-                            
-                            </td>
-                               <td></td> 
-                               <td colspan="3">
-                                   
-                                <div class="right"><label>o/w&nbsp;</label><input type="text" id="ow" size="10"></div><br>
-                                <div class="right"><label>Orig_com&nbsp;</label><input type="text" id="origCom" size="10"></div><br>
-                                <div class="right"><label>Net_com&nbsp;</label><input type="text" id="netCom" size="10"></div><br>                            
-                                <div class="right"><label>Trackng#&nbsp;</label><input type="text" id="tracking" size="10"></div>
-
-                               </td>
-                               
-                               
-
-                            </tr>
-                       </tfoot>
-                       </table> 
-                    </div>
-                    <ul class="right slimcol">
-                    <li><label>TJ Dt</label>
-                        <input type="text" id="tjDt" size="1">
-                    <li><label>TJ Resolve</label>
-                        <input type="text" id="tjResolv"size="1">
-                    </li>
-                    <li><label>Cancel</label>
-                        <input type="text" id="cancel" size="1">
-                    <li>
-                        <label>Actual</label>
-                        <input type="text" id="actual" size="1">
-                    </li>
-                        <li><label>Rush</label>
-                        <input type="text" id="rush" size="1">
-                    <li>
-                        <label>ShpVia</label>
-                        <input type="text" id="shpVia" size="1">
-                    </li>
-                    <li>
-                        <label>Res</label>
-                        <input type="text" id="res" size="1">
-                    </li>
-                    <li>
-                        <label>Typset</label>
-                        <input type="text" id="typset" size="1">
-                    </li>
-                    <li>
-                        <label>TSD2</label>
-                        <input type="text" id="TSD2" size="1">
-                    </li>
-                    <li>
-                        <label>Ship</label>
-                        <input type="text" id="ship" size="1">
-                    </li>
-                    <li>
-                        <label>Return</label>
-                        <input type="text" id="return" size="1">
-                    </li>
-                    <li>
-                        <label>Reship</label>
-                        <input type="text" id="reShip" size="1">
-                    </li>
-                    <li>
-                        <label>&nbsp;Date</label>
-                        <input type="text" id="reDate" size="1">
-                    </li>
-                    <li>
-                        <label>&nbsp;Price</label>
-                        <input type="text" id="rePrice" size="1">
-                    </li>
-                    <li>
-                        <label>Weight</label>
-                        <input type="text" id="weight" size="1">
-                    </li>
-                </ul>
-                 <div class="left">
-                    <label>Comments</label><br>
-                    <textarea id="comments" cols="33"></textarea>
-                </div>
-                <div class="left">
-                    <label>CCRepNts</label><br>
-                    <textarea id="ccRepNts" cols="33"></textarea>
-                </div>
-            </fieldset>
-        </form>
-    </div>
-<!-- Employee Screen -->
-    <div class="window float" id="employee" menu="empMenu">
-        <form id="frmEmp">
-
-        <fieldset class="entry">
-        <legend>Specialty Graphics Employee Entry Window</legend>
-        <div class="close">[<a onClick="hideMe('employee');">X</a>]</div>
-        <ul>
-            <li><label>Salesperson</label>    
-                <input type=text id='salespersn'>
-                <label>Start Date</label>
-                <input type="text" id="startDt">
-            </li>
-        </ul>
-        
-        <div class="group">
-        <ul>
-            <li><label>F Name</label>
-                <input type="text" id="firstName">
-                <label>Status</label>
-                <input type="text" id="status">
-            </li>
-            <li><label>L Name</label>
-                <input type="text" id="company">
-                <label>SS Num</label>
-                <input type="text" id="ssn" size="2">
-            </li>
-            <li><label>Address</label><input type="text" id="address1">
-             <label>B Date</label>
-                <input type="text" id="dob">
-                <br>
-                <label>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</label>
-                <input type="text" id="address2">
-                <label>M stat</label>
-                <input type="text" id="married">
-               
-            </li>
-            <li><label>City</label>
-                <input type="text" id="city" size="10">
-                <label>State</label>
-                <input type="text" id="state" size="1">
-                <label>Zip</label>
-                <input type="text" id="zip" size="2">
-            </li>
-        </ul>
-        </div>
-        <ul class="left">
-            <li><label>Weekly Salary</label>    
-                <input type=text id='salary'>
-                <label>Office</label>
-                <input type="text" id="fax">
-            </li>
-            <li></li>
-            <li><label>Team Leaders</label>
-                <input type="text" id="sec">
-                <label>Level</label>
-                <input type="text" id="lastStat">
-            </li>
-        </ul>
-        </fieldset>
-        </form>
-    </div>
-<!-- Products Window -->
-    <div class="window float" id="products" menu="prodMenu">
-        <form id="frmProd">
-
-        <fieldset class="entry">
-        <legend>Specialty Graphics Employee Entry Window</legend>
-        <div class="close">[<a onClick="hideMe('products');">X</a>]</div>
-        <ul>
-            <li><label>Salesperson</label>    
-                <input type=text id='salespersn'>
-                <label>Start Date</label>
-                <input type="text" id="startDt">
-            </li>
-        </ul>
-        
-        <div class="group">
-        <ul>
-            <li><label>F Name</label>
-                <input type="text" id="firstName">
-                <label>Status</label>
-                <input type="text" id="status">
-            </li>
-            <li><label>L Name</label>
-                <input type="text" id="company">
-                <label>SS Num</label>
-                <input type="text" id="ssn" size="2">
-            </li>
-            <li><label>Address</label><input type="text" id="address1">
-             <label>B Date</label>
-                <input type="text" id="dob">
-                <br>
-                <label>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</label>
-                <input type="text" id="address2">
-                <label>M stat</label>
-                <input type="text" id="married">
-               
-            </li>
-            <li><label>City</label>
-                <input type="text" id="city" size="10">
-                <label>State</label>
-                <input type="text" id="state" size="1">
-                <label>Zip</label>
-                <input type="text" id="zip" size="2">
-            </li>
-        </ul>
-        </div>
-        <ul class="left">
-            <li><label>Weekly Salary</label>    
-                <input type=text id='salary'>
-                <label>Office</label>
-                <input type="text" id="fax">
-            </li>
-            <li></li>
-            <li><label>Team Leaders</label>
-                <input type="text" id="sec">
-                <label>Level</label>
-                <input type="text" id="lastStat">
-            </li>
-        </ul>
-        </fieldset>
-        </form>
-    </div>
-
-<!-- User Window -->
-    <div class="window float" id="users">
-        <form id="frmUser">
-
-        <fieldset class="entry">
-        <legend>Specialty Graphics Employee Entry Window</legend>
-        <div class="close">[<a onClick="hideMe('users');">X</a>]</div>
-        <ul>
-            <li><label>Salesperson</label>    
-                <input type=text id='salespersn'>
-                <label>Start Date</label>
-                <input type="text" id="startDt">
-            </li>
-        </ul>
-        
-        <div class="group">
-        <ul>
-            <li><label>F Name</label>
-                <input type="text" id="firstName">
-                <label>Status</label>
-                <input type="text" id="status">
-            </li>
-            <li><label>L Name</label>
-                <input type="text" id="company">
-                <label>SS Num</label>
-                <input type="text" id="ssn" size="2">
-            </li>
-            <li><label>Address</label><input type="text" id="address1">
-             <label>B Date</label>
-                <input type="text" id="dob">
-                <br>
-                <label>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</label>
-                <input type="text" id="address2">
-                <label>M stat</label>
-                <input type="text" id="married">
-               
-            </li>
-            <li><label>City</label>
-                <input type="text" id="city" size="10">
-                <label>State</label>
-                <input type="text" id="state" size="1">
-                <label>Zip</label>
-                <input type="text" id="zip" size="2">
-            </li>
-        </ul>
-        </div>
-        <ul class="left">
-            <li><label>Weekly Salary</label>    
-                <input type=text id='salary'>
-                <label>Office</label>
-                <input type="text" id="fax">
-            </li>
-            <li></li>
-            <li><label>Team Leaders</label>
-                <input type="text" id="sec">
-                <label>Level</label>
-                <input type="text" id="lastStat">
-            </li>
-        </ul>
-        </fieldset>
-        </form>
-    </div>
 
 
 </div>
@@ -659,8 +201,8 @@
     		<li>| 2		</li>
     	</ul>
     </div>
-        
-   </div>
+ </div>       
+   
    
 
    <div class="background">

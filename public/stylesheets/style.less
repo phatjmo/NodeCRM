@@ -14,7 +14,7 @@ div.workspace {
   width: 800px;
   margin: 2% 20% 20% 20%;
   height: 440px;
-  background-color: darkblue;
+  background-color: rgba(0,0,128,.9);
 
 }
 
@@ -59,14 +59,17 @@ div.workspace {
 }
 
 .window {
-	height:370px;
+	/*height:370px;*/
 	position:fixed;
-	display: inline-block;
-	white-space-collapse: discard;
+	display: none;
+	background-color: darkblue;
 }
 
 .status {
 	position:relative;
+	width: 800px;
+	height: 20px;
+	background-color: darkblue;
 }
 
 .status ul {
@@ -93,7 +96,7 @@ div.workspace {
 
 
 .entry  {
- width:790px;
+ /*width:790px;*/
  /*height: 370px;*/
  padding: 0;
 }
@@ -199,12 +202,12 @@ div.workspace {
 }
 
 .left .multiline {
- border-top: thin solid yellow;
+ border-top: 2px solid yellow;
  border-right: thin solid yellow;
 }
 
 .right .multiline {
- border-top: thin solid yellow;
+ border-top: 2px solid yellow;
  border-left: thin solid yellow;
 }
 
@@ -224,6 +227,7 @@ div.workspace {
 	white-space:pre;
 	color: black; 
 	background: white;
+
 }
 .logo {
 	border:thick double lightgray;
@@ -242,13 +246,46 @@ div.workspace {
 	position: fixed;
 	visibility: hidden;
 }
-
-#main_cust {
-	visibility: hidden;
+.group {
+	border: 2px solid yellow;
+	margin:5% 5% 1% 5%;
+	display:block;
 }
 
-#main_order { visibility: hidden;
+.full {
+	width:790px;
+	
+
 }
+
+
+.float {
+	width:650px;
+	box-shadow:10px 10px 10px 0px black;
+	margin:0 5% auto;
+}
+
+.float ul {
+	margin:0 5% 5% 5%;
+}
+
+.close {
+	position:absolute;
+	top:0;
+	left:0;
+	background-color: darkblue;
+	color:lightgray;
+}
+
+.close a {
+	color:lightgray;
+	cursor: pointer;
+}
+
+.close a:hover {
+	color: darkgray;
+}
+
 
 .dos {
 width: 400px;

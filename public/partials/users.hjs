@@ -1,0 +1,65 @@
+<!-- User Window -->
+    <div class="window float" id="users">
+        <form id="frmUser">
+
+        <fieldset class="entry">
+        <legend>Specialty Graphics Employee Entry Window</legend>
+        <div class="close">[<a onClick="hideMe('users');">X</a>]</div>
+        <ul>
+            <li><label>Salesperson</label>    
+                <input type=text id='salespersn'>
+                <label>Start Date</label>
+                <input type="text" id="startDt">
+            </li>
+        </ul>
+        
+        <div class="group">
+        <ul>
+            <li><label>F Name</label>
+                <input type="text" id="firstName">
+                <label>Status</label>
+                <input type="text" id="status">
+            </li>
+            <li><label>L Name</label>
+                <input type="text" id="company">
+                <label>SS Num</label>
+                <input type="text" id="ssn" size="2">
+            </li>
+            <li><label>Address</label><input type="text" id="address1">
+             <label>B Date</label>
+                <input type="text" id="dob">
+                <br>
+                <label>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</label>
+                <input type="text" id="address2">
+                <label>M stat</label>
+                <input type="text" id="married">
+               
+            </li>
+            <li><label>City</label>
+                <input type="text" id="city" size="10">
+                <label>State</label>
+                <input type="text" id="state" size="1">
+                <label>Zip</label>
+                <input type="text" id="zip" size="2">
+            </li>
+        </ul>
+        </div>
+        <ul class="left">
+            <li><label>Weekly Salary</label>    
+                <input type=text id='salary'>
+                <label>Office</label>
+                <input type="text" id="fax">
+            </li>
+            <li></li>
+            <li><label>Team Leaders</label>
+                <input type="text" id="sec">
+                <label>Level</label>
+                <input type="text" id="lastStat">
+            </li>
+        </ul>
+        </fieldset>
+        </form>
+    </div>
+
+
+</div>
