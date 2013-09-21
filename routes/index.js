@@ -9,7 +9,7 @@ exports.index = function(req, res){
   		title: 'SGI Core',
   		partials:
   		{
-  			head : 'head',
+  			background : 'background',
   			body : "body",
   		}
   	});
