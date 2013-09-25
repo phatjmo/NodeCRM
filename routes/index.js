@@ -14,3 +14,15 @@ exports.index = function(req, res){
   		}
   	});
 };
+
+exports.login = function(req, res){
+  res.render('login', 
+  	{ 
+  		title: 'SGI Core',
+  		partials:
+  		{
+  			background : 'background',
+  			body : "body",
+  		}
+  	});
+};
