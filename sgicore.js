@@ -228,9 +228,10 @@ app.post('/login', function(req, res){
         			// in the session store to be retrieved,
         			// or in this case the entire user object
         			req.session.user = user;
-        			req.session.success = 'Authenticated as ' + user.name
+        			req.session.success = 'Authenticated as ' + user.login
         			+ ' click to <a href="/logout">logout</a>. '
         			+ ' You may now access <a href="/restricted">/restricted</a>.';
+        			console.log("Session Saved: " + req.session.user.userid + ":" + req.session.user.login + ":" + req.session.user.firstName + ":" + req.session.user.lastName);
         			res.redirect('sgicore');
       			});
     		} else {

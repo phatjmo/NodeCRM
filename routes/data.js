@@ -48,7 +48,19 @@ console.log("Menus Requested: \n");
   //if (req.is('json')) {
   //	console.log("Request is JSON!")
   //}
-  var jsonMenus = {
+  var userid = req.session.user.userid;
+  var menu = req.body.menu;
+  var mysqlModel = require('mysql-model');
+  var sgiModels = mysqlModel.createConnection({
+	host	: 'localhost',
+	user	: 'root',
+	password: '',
+	database: 'sgicore',
+});
+  var accessList = sgiModels.extend({ tableName: "accessList", });
+
+
+  /*var jsonMenus = {
   	"menus": [
   	{"name" : "mainMenu", "command" : "mainCust", "label" : "Main Cust"},
   	{"name" : "mainMenu", "command" : "mainOrder", "label" : "Main Orders"},
@@ -58,8 +70,27 @@ console.log("Menus Requested: \n");
   	{"name" : "mainMenu", "command" : "utils", "label" : "Utilities"},
   	{"name" : "mainMenu", "command" : "logoff", "label" : "LogOff"}
   	]
-};
-	res.json(jsonMenus);
+};*/
+	var sqlMenus = new accessList();
+	sqlMenus.find("all", {where : "userid = " + userid + " AND menu = " + menu}, function(err, rows){
+		if (err) console.log(err);
+		console.log("Inside the model!");
+		var txtMenus = '{ "menus": [\n ';
+		for (m in rows) {
+			console.log("1: " + rows[m]);
+			if (m > 0) txtMenus += ',\n';
+			txtMenus += '{"name" : "' + rows[m].menu + '", "command" : "' + rows[m].command + '", "label" : "' + rows[m].label + '"}';
+
+		};
+		txtMenus += ']}';
+		//console.log(txtMenus);
+		var jsonMenus = eval ("(" + txtMenus + ")");
+		console.log(jsonMenus);
+		res.json(jsonMenus);
+
+	});
+
+	//res.json(jsonMenus);
   
 };
 

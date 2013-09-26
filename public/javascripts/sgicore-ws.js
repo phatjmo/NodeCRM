@@ -59,7 +59,8 @@
             showMenu = "#"+menu;
             
             $('#menus').append('<ul id="' + menu + '" style="display:none;"></ul>');
-            $.post("menus", {"giveMe" : '"' + menu + '"'}, function(data){
+            $.post("menus", {"menu" : '"' + menu + '"'}, function(data){
+                console.log(data);
                 for (i in data.menus) {
                     var menuItem = '<li><a onclick=\'hitMenu("'+ data.menus[i].command + '");\'>'+data.menus[i].label + '</a></li>';
                     $(showMenu).append(menuItem);
@@ -122,8 +123,12 @@
 
         function hitMenu (win) {
             console.log("menu(" + win + ")");
+            if (win == "logoff") {
+                window.location.replace("/logout");
+            } else {
             popWin(win);
             hideMenu("mainMenu");
+            }
             
         }
         $('document').ready(function(){
