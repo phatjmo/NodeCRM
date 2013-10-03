@@ -76,6 +76,14 @@
     {{< background}}   	
     {{< background}}    
    </div>  
- 
+ <button id="opener">open the dialog</button>  
+ <div id='dialog' title='Dialog Title'> This is a Dialog! </div>
+ <script>
+$( "#dialog" ).dialog({ autoOpen: false });
+$( "#opener" ).click(function() {
+  var dialog = $( "#dialog" ).dialog({ buttons: [ { text: "Yes", click: function() { $( this ).dialog( "close" ); } }, { text: "No", click: function() { $( this ).dialog("close");}} ] });
+  dialog.dialog("open");
+});
+</script>
   </body> 
 </html>

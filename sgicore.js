@@ -6,30 +6,21 @@
 var express = require('express');
 var routes = require('./routes');
 var models = require('./models');
-var mysqlModel = require('mysql-model');
 var user = require('./routes/user');
 var data = require('./routes/data');
 var http = require('http');
 var path = require('path');
-var sgiModels = mysqlModel.createConnection({
-	host	: 'localhost',
-	user	: 'root',
-	password: '',
-	database: 'sgicore',
-});
 var hash = require('./pass').hash;
-//var passport = require('passport');
-//var bcrypt = require('bcrypt');
-//var LocalStrategy = require('passport-local').Strategy;
-//var flash = require('connect-flash');
+
 
 //Model declarations
-var users = sgiModels.extend({ tableName: "users", });
-var customer = sgiModels.extend({ tableName: "customer", });
-var employee = sgiModels.extend({ tableName: "employee", });
-var orders = sgiModels.extend({ tableName: "orders", });
-var poducts = sgiModels.extend({ tableName: "products", });
-var accessList = sgiModels.extend({ tableName: "accessList", });
+var users = models.users;
+var customer = models.customer;
+var employee = models.employee;
+var orders = models.orders;
+var poducts = models.products;
+var accessList = models.accessList;
+
 
 
 var app = express();
@@ -55,9 +46,6 @@ app.use(express.methodOverride());
 app.use(express.cookieParser('The Answer is 42'));
 app.use(express.session());
 app.use(express.errorHandler({ dumpExceptions: true, showStack: true }));
-//app.use(flash());
-//app.use(passport.initialize());
-//app.use(passport.session());
 app.use(app.router);
 app.use(require('less-middleware')({ src: __dirname + '/public' }));
 app.use(express.static(path.join(__dirname, 'public')));

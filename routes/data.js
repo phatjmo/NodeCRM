@@ -1,23 +1,22 @@
 /*
  * POST Data.
  */
+var models = require('../models');
+var users = models.users;
+var customer = models.customer;
+var employee = models.employee;
+var orders = models.orders;
+var poducts = models.products;
+var accessList = models.accessList;
 
 exports.dupe = function(req, res){
-  var mysqlModel = require('mysql-model');
-  var sgiModels = mysqlModel.createConnection({
-	host	: 'localhost',
-	user	: 'root',
-	password: '',
-	database: 'sgicore',
-	});	
-  var Customer = sgiModels.extend({ tableName: "customer", });
-
+ 
   switch(req.body.formName)
   	{
   	case 'frmCust':
   		console.log("Checking for Customer Dupe");
   		var txtCust = '{';
-  		var dupeCust = new Customer();
+  		var dupeCust = new customer();
   		//console.log(req.body);
   		dupeCust.find('first', {fields: ['custid'], where: "phone = '" + req.body.phone + "' or company = '" + req.body.company +"'"}, function(err, row){
   			console.log("Searching Table For Dupe!");
@@ -55,20 +54,10 @@ exports.dupe = function(req, res){
 }
 
 exports.save = function(req, res){
-  var mysqlModel = require('mysql-model');
-  var sgiModels = mysqlModel.createConnection({
-	host	: 'localhost',
-	user	: 'root',
-	password: '',
-	database: 'sgicore',
-	});	
-  var Customer = sgiModels.extend({ tableName: "customer", });	
+ 
   
   console.log("Save request submitted: \n");
-  //console.log(req.body);
-  //if (req.is('json')) {
-  //	console.log("Request is JSON!")
-  //}
+  
   for (field in req.body) {
   	var value = eval("req.body." + field);
   	console.log(field + ' = ' + value);
@@ -87,7 +76,7 @@ exports.save = function(req, res){
   		}
   		txtCust += '}';
   		var jsonCust = eval ("(" + txtCust + ")");
-  		var newCust = new Customer(jsonCust);
+  		var newCust = new customer(jsonCust);
   		console.log(jsonCust);
   		newCust.save(function(err){
   			if (err) console.log(err);
@@ -96,16 +85,80 @@ exports.save = function(req, res){
   		break;
   	case 'frmOrders':
   		console.log("Saving Order Data");
+  		var txtOrder = '{';
+   		for (field in req.body) {
+  			if (field != "formName") {
+  				var value = eval("req.body." + field);
+  				txtOrder += '"'+field+'" : "'+value+'",\n';
+  				//console.log(field + ' = ' + value);
+  			};
+  		}
+  		txtOrder += '}';
+  		var jsonOrder = eval ("(" + txtOrder + ")");
+  		var newOrder = new orders(jsonOrder);
+  		console.log(jsonOrder);
+  		newOrder.save(function(err){
+  			if (err) console.log(err);
+  		});
   		res.send(200,'Order Data Saved');
   		break;
   	case 'frmEmp':
   		console.log("Saving Employee Data");
+  		var txtEmp = '{';
+   		for (field in req.body) {
+  			if (field != "formName") {
+  				var value = eval("req.body." + field);
+  				txtEmp += '"'+field+'" : "'+value+'",\n';
+  				//console.log(field + ' = ' + value);
+  			};
+  		}
+  		txtEmp += '}';
+  		var jsonEmp = eval ("(" + txtEmp + ")");
+  		var newEmp = new employee(jsonEmp);
+  		console.log(jsonEmp);
+  		newEmp.save(function(err){
+  			if (err) console.log(err);
+  		});
   		res.send(200,'Employee Data Saved');
   		break;
   	case 'frmProd':
   		console.log("Saving Product Data");
+  		var txtProd = '{';
+   		for (field in req.body) {
+  			if (field != "formName") {
+  				var value = eval("req.body." + field);
+  				txtProd += '"'+field+'" : "'+value+'",\n';
+  				//console.log(field + ' = ' + value);
+  			};
+  		}
+  		txtProd += '}';
+  		var jsonProd = eval ("(" + txtProd + ")");
+  		var newProd = new products(jsonProd);
+  		console.log(jsonProd);
+  		newProd.save(function(err){
+  			if (err) console.log(err);
+  		});
   		res.send(200,'Product Data Saved');
-  		break;	
+  		break;
+  	case 'frmUser':
+  		console.log("Saving Product Data");
+  		var txtUser = '{';
+   		for (field in req.body) {
+  			if (field != "formName") {
+  				var value = eval("req.body." + field);
+  				txtUser += '"'+field+'" : "'+value+'",\n';
+  				//console.log(field + ' = ' + value);
+  			};
+  		}
+  		txtUser += '}';
+  		var jsonUser = eval ("(" + txtUser + ")");
+  		var newUser = new users(jsonUser);
+  		console.log(jsonUser);
+  		newUser.save(function(err){
+  			if (err) console.log(err);
+  		});
+  		res.send(200,'User Data Saved');
+  		break;		
   	default:
   		res.send(500, 'Invalid Form Post');
   		
@@ -117,21 +170,10 @@ exports.save = function(req, res){
 exports.menus = function(req, res){
 
 console.log("Menus Requested: \n");
-  //console.log(req.body);
-  //if (req.is('json')) {
-  //	console.log("Request is JSON!")
-  //}
+ 
   var userid = req.session.user.userid;
   var menu = req.body.menu;
-  var mysqlModel = require('mysql-model');
-  var sgiModels = mysqlModel.createConnection({
-	host	: 'localhost',
-	user	: 'root',
-	password: '',
-	database: 'sgicore',
-});
-  var accessList = sgiModels.extend({ tableName: "accessList", });
-
+  
 
   /*var jsonMenus = {
   	"menus": [
@@ -167,13 +209,4 @@ console.log("Menus Requested: \n");
   
 };
 
-/*<ul id="mainMenu">
-    	<li><a onclick="hitMenu('mainCust');">Main Cust</a></li>
-    		<li><a onclick="hitMenu('mainOrder');">Main Orders</a></li>
-    		<li><a onclick="hitMenu('products');">Products</a></li>
-    		<li><a onclick="hitMenu('employee');">Employees</a></li>
-    		<li><a onclick="hitMenu('admin');">Administration</a></li>
-    		<li><a onclick="hitMenu('utils');">Utilities</a></li>
-    		<li><a onclick="hitMenu('logoff');">LogOff</a></li>
-    	</ul>
- */
+ 
