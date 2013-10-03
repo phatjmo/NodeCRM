@@ -9,8 +9,8 @@ exports.index = function(req, res){
   		title: 'SGI Core',
   		partials:
   		{
-  			background : 'background',
-  			body : "body",
+  			head : 'head',
+  			background : 'background'
   		}
   	});
 };
@@ -19,10 +19,12 @@ exports.login = function(req, res){
   res.render('login', 
   	{ 
   		title: 'SGI Core',
+  		message : req.session.message,
   		partials:
   		{
+  			head: 'head',
   			background : 'background',
-  			body : "body",
+  			logo: 'logo',
   		}
   	});
 };

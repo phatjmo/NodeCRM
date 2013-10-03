@@ -65,7 +65,11 @@
     </div>
   </div>       
    
-   
+   <script type="text/javascript">
+    $('document').ready(function(){
+       drawMenu('mainMenu');
+      });
+   </script>
 
    <div class="background">
     {{< background}} 

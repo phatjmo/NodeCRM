@@ -1,13 +1,45 @@
-<form action="/login" method="post">
-    <div>
-        <label>Username:</label>
-        <input type="text" name="username"/>
-    </div>
-    <div>
-        <label>Password:</label>
-        <input type="password" name="password"/>
-    </div>
-    <div>
-        <input type="submit" value="Log In"/>
-    </div>
+<!DOCTYPE html>
+<html>
+  <head>
+   {{> head}}
+   
+  </head>
+  <body>
+  <!-- <div class="message">{{ message }}</div> -->
+<div class="window login" id='login'> 
+<form id="frmLogin" action="/login" method="post">
+    <fieldset class='entry'>
+    <legend>SGI Core User Login</legend>        
+    <ul>
+        <!--<li><div class='logo'>{{> logo }}</div></li>-->
+        <li>
+            <label>Username:</label>
+            <input type="text" name="username"/>
+        </li>
+        <li>
+            <label>Password:</label>
+            <input type="password" name="password"/>
+        </li>
+        <li>
+           <center> <input class='button' type="submit" value="Log In"/></center>
+        </li>
+    </ul>
+    </fieldset>
 </form>
+</div>
+ <div class="background">
+    {{< background}} 
+    {{< background}}    
+    {{< background}}    
+   </div>
+   <script type="text/javascript">
+    $('document').ready(function(){
+       var message = "{{ message }}";
+       if (message != "") {
+            $( "<div class='message'><fieldset><legend>Authentication Error</legend>" + message + "</fieldset></div>" ).insertBefore( "#login" );
+            $( ".message" ).slideDown("slow");
+        }
+      });
+   </script>
+</body>
+</html>

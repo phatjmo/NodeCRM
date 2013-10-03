@@ -110,9 +110,28 @@
             });
             postString += '}';
             //console.log(postString);
-            $.post( 'save', $.parseJSON(postString), function( data ) {
-                console.log(data);
-            });
+           var chkDupe = $.post( 'dupe', $.parseJSON(postString), function( data ) {
+                console.log("Dupe Check Sent: " + data);
+                })
+                .done(function( data ) {
+                    console.log("Dupe Check Complete: " + data);
+                    if (data == 'nodupe') {
+                        $.post( 'save', $.parseJSON(postString), function() {
+                        console.log("Save Attempted.");
+                        });
+                    } else {
+                        alert('There is a duplicate of this record, do you wish to overwrite?');
+                    }
+                    })
+                .fail(function( data ) {
+                    console.log("Dupe Check Failed: " + data);
+                });
+
+               /* $.post( 'save', $.parseJSON(postString), function() {
+                console.log("Save Attempted.");
+                });*/
+            
+            
 
         }
         function hasMenu (win) {
@@ -131,9 +150,6 @@
             }
             
         }
-        $('document').ready(function(){
-            drawMenu('mainMenu');
-
-        })
+        
 
 

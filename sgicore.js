@@ -75,82 +75,13 @@ app.use(function(req, res, next){
   next();
 });
 
-//Configuring Authentication
-/*passport.serializeUser(function(user, done) {
-  console.log("serializeUser: " + user.login);
-  done(null, user.login);
-});
 
-passport.deserializeUser(function(id, done) {
-  console.log("deserializeUser");
-});*/
-
-/*passport.use(new LocalStrategy(
-  function(username, password, done) {
-    console.log("LocalStrategy Function!!!");
-    var authUser = new users();
-    //console.log(authUser);
-    //authUser.find('first',{function(err, result){
-    //authUser.find('first', {where: "login = 'justin'"}, function(err, result){
-    authUser.find('first', {where: "login ='"+username+"'"}, function(err, result){
-    	if (!result) {
-    		console.log("User Not Found!");
-    	} else {
-    		console.log("userid = " + result.userid);
-    		console.log("login = " + result.login);
-    		console.log("firstName = " + result.firstName);
-    		console.log("lastName = " + result.lastName);
-    		console.log("encryptedPass = " + result.encryptedPass);
-    	}
-
-    });
-    console.log("User Name: " + username);
-    console.log("Password: " + password);
-    //User.findOne({ username: username }, function(err, user) {
-    authUser.find('first', {where: "login ='"+username+"'"}, function(err, user){
-      
-      if (err) { 
-      	console.log(err);
-      	return done(err);
-       }
-      if (!user) {
-      	console.log("Incorrect Username");
-        return done(null, false, { message: 'Incorrect username.' });
-      }
-      if (!user.encryptedPass == password) {
-        console.log("Incorrect Password");
-        return done(null, false, { message: 'Incorrect password.' });
-      }
-      return done(null, user);
-    })
-  }
-));*/
 
 // development only
 if ('development' == app.get('env')) {
   app.use(express.errorHandler());
 }
 
-// dummy database
-
-//var users = {
-//  tj: { name: 'tj' }
-//};
-
-// when you create a user, generate a salt
-// and hash the password ('foobar' is the pass here)
-
-/*hash('foobar', function(err, salt, hash){
-  if (err) throw err;
-  // store the salt & hash in the "db"
-  users.tj.salt = salt;
-  users.tj.hash = hash;
-  console.log("Salt: " + users.tj.salt);
-  console.log("Hash: " + users.tj.hash);
-});*/
-
-
-// Authenticate using our plain-object database of doom!
 
 function authenticate(name, pass, fn) {
   if (!module.parent) console.log('authenticating %s:%s', name, pass);
@@ -198,19 +129,24 @@ app.get('/logout', function(req, res){
   });
 });
 
-app.get('/login', function(req, res){
-  res.render('login');
-});
+//app.get('/login', function(req, res){
+//  res.render('login');
+//});
 
 app.post('/login', function(req, res){
   var authUser = new users();
-
-  authUser.find('first', {where: "login = '"+req.body.username+"'"}, function(err, user){
+  if (!req.body.username && !req.body.password) {
+  	console.log('Nothing Sent!');
+  	req.session.message = "Come on now, ya gotta enter SOMETHIN'!";
+  	res.redirect('login');
+  } else {
+  	authUser.find('first', {where: "login = '"+req.body.username+"'"}, function(err, user){
 	if (err) {
 		console.log(err);
 		res.send(err);
 	}
-	if (user.salt && user.encryptedPass) {
+	//if (user) console.log("Object Returned: " + user);
+	if (user && user.salt && user.encryptedPass) {
 		if (!module.parent) console.log('authenticating %s:%s', req.body.username, req.body.password);
   
     	console.log("The User Salt: " + user.salt);
@@ -236,17 +172,19 @@ app.post('/login', function(req, res){
       			});
     		} else {
     		console.log('invalid password');
+    		req.session.message = 'Please check your password.';
     			res.redirect('login');
     		}
   		});
   		
     } else {
       		//req.session.error = 'Authentication failed, please check your '
-      		console.log('Authentication failed, please check your '
-        	+ ' username and password.');
-      		res.redirect('login');
+      		req.session.message = 'Please check your username.';
+        	console.log('Username not found!');
+        	res.redirect('login');
     }
   });
+ }
 
 		//console.log("Returning rowset: " + user.login);
 		//return user;
@@ -260,15 +198,10 @@ app.get('/sgicore', restrict, routes.index);
 //app.post('/', routes.index);
 //app.post('/saveData', routes.index);
 app.post('/save', data.save);
+app.post('/dupe', data.dupe);
 app.post('/menus', data.menus);
-//app.get('/login', routes.login);*/
+app.get('/login', routes.login);
 
-//Use Below for Passport Local
-/*app.post('/login',
-  passport.authenticate('local', { successRedirect: '/',
-                                   failureRedirect: '/login',
-                                   failureFlash: false })
-);*/
 app.get("/hashthis", function(req, res){
 	if (req.query.password) {
 	var pass = req.query.password;

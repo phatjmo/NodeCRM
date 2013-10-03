@@ -88,12 +88,12 @@
     	    <!--<li><hr></li>-->
     		<li><div class="multiline">
     				<label>Ad Copy</label><br>
-    				<textarea id="orderhist"></textarea>
+    				<textarea id="adCopy"></textarea>
     			</div>
     		</li>
     		<li><div class="multiline">
     				<label>Customer History</label><br>
-    				<textarea id="notes"></textarea>
+    				<textarea id="custHist"></textarea>
     			</div>
     		</li>
 			</ul>
