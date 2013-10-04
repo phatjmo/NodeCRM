@@ -75,6 +75,70 @@
             $()
         }
 
+        function dupeCheck(form) {
+            var jsonQuery = {
+                "formName" : form
+            };
+
+            switch (form) {
+                case 'frmCust':
+                    jsonQuery.phone = $( "#frmCust #phone" ).val();
+                    jsonQuery.company = $( "#frmCust #company" ).val();
+                    break;
+                case 'frmOrders':
+                    jsonQuery.phone = $( "#frmCust #phone" ).val();
+                    jsonQuery.company = $( "#frmCust #company" ).val();
+                    break;
+                case 'frmEmp':
+                    jsonQuery.phone = $( "#frmCust #phone" ).val();
+                    jsonQuery.company = $( "#frmCust #company" ).val();
+                    break;    
+                case 'frmProd':
+                    jsonQuery.phone = $( "#frmCust #phone" ).val();
+                    jsonQuery.company = $( "#frmCust #company" ).val();
+                    break;
+                 case 'frmUser':
+                    jsonQuery.phone = $( "#frmCust #phone" ).val();
+                    jsonQuery.company = $( "#frmCust #company" ).val();
+                    break;
+                default:
+                    console.log("Invalid Form Submitted!");        
+            }
+
+            $.post( 'dupe', jsonQuery, function( data ) {
+                console.log("Dupe Check Sent: " + data);
+                })
+                .done(function( data ) {
+                    console.log("Dupe Check Complete: " + data);
+                    if (data == 'nodupe') {
+                        processForm(form);
+                    } else {
+                        //alert('There is a duplicate of this record, do you wish to overwrite?');
+                        $( "#dialog" ).text("There is a duplicate of this record, do you wish to overwrite?");
+                        var dialog = $( "#dialog" ).dialog({ 
+                                resizable: false,
+                                appendTo: ".workspace",
+                                draggable: false,
+                                title: "Warning!",
+                                modal: true,
+                                dialogClass: "alert no-close",
+                                buttons: [ 
+                                    { text: "Yes", click: function() { 
+                                        processForm(form, data)
+                                        $( this ).dialog( "close" ); } }, 
+                                    { text: "No", click: function() {                               
+                                        $( this ).dialog("close");} } 
+                                        ] });
+                        dialog.dialog("open");
+                                
+                    //});
+                    }
+                    })
+                .fail(function( data ) {
+                    console.log("Dupe Check Failed: " + data);
+                });
+        }
+
         function saveData() {
             var activeForm = "";
             $('form').each(function (i) {
@@ -90,46 +154,35 @@
             });
             if (activeForm != "") {
                 console.log(activeForm + " is not empty")
-                processForm(activeForm);
+                //processForm(activeForm);
+                dupeCheck(activeForm);
             } else {
                 console.log(activeForm + " is empty")
             }
 
         }
 
-        function processForm (form) {
+        function processForm (form, dupeID) {
             
             var procForm = "#" + form;
             //var postString = "{\"" + form + "\": [{";
-            var postString = '{ "formName": "' + form + '"' ;
+            var txtPost = '{ "formName": "' + form + '"' ;
            
             $(procForm + ' input').each(function(i) {
                 var inputField = $(this).prop('id');
-                postString += ',';
-                postString += '"' + inputField + '": "' + $(procForm + ' #' + inputField).val()+'"';
+                txtPost += ',';
+                txtPost += '"' + inputField + '": "' + $(procForm + ' #' + inputField).val()+'"';
             });
-            postString += '}';
-            //console.log(postString);
-           var chkDupe = $.post( 'dupe', $.parseJSON(postString), function( data ) {
-                console.log("Dupe Check Sent: " + data);
-                })
-                .done(function( data ) {
-                    console.log("Dupe Check Complete: " + data);
-                    if (data == 'nodupe') {
-                        $.post( 'save', $.parseJSON(postString), function() {
-                        console.log("Save Attempted.");
-                        });
-                    } else {
-                        alert('There is a duplicate of this record, do you wish to overwrite?');
-                    }
-                    })
-                .fail(function( data ) {
-                    console.log("Dupe Check Failed: " + data);
-                });
+            txtPost += '}';
+            var jsonPost = $.parseJSON(txtPost);
+            if (dupeID) {
+                jsonPost.id = dupeID
+            };
 
-               /* $.post( 'save', $.parseJSON(postString), function() {
+            console.log(jsonPost);
+            $.post( 'save', jsonPost, function() {
                 console.log("Save Attempted.");
-                });*/
+            });
             
             
 

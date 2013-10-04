@@ -1,18 +1,8 @@
 <!DOCTYPE html>
 <html>
   <head>
-   <!-- {{> head}} -->
-   
-	
-   <title>{{ title }}</title>
-    <link rel='stylesheet' href='stylesheets/style.css' />
-    <link rel='stylesheet' href='stylesheets/cupertino/jquery-ui-1.10.3.custom.css' />
-    <meta charset="utf-8" />
-    <meta http-equiv="Content-type" content="text/html; charset=utf-8" />
-    <script src="javascripts/jquery-1.10.2.min.js" type="text/javascript"></script>
-    <script src="javascripts/jquery-ui.js" type="text/javascript"></script>
-    <script src="javascripts/sgicore-ws.js" type="text/javascript"></script>
-  </head>
+  {{> head}}
+   </head>
   <body>
 <!--<button id="btnCust" onclick="switchWin('main_cust',this);">Show Orders</button>
 <button id="btnOrder"  onclick="switchWin('main_order',this);">Show Cust</button>
@@ -81,8 +71,24 @@
  <script>
 $( "#dialog" ).dialog({ autoOpen: false });
 $( "#opener" ).click(function() {
-  var dialog = $( "#dialog" ).dialog({ buttons: [ { text: "Yes", click: function() { $( this ).dialog( "close" ); } }, { text: "No", click: function() { $( this ).dialog("close");}} ] });
+  var theClick = "";
+  var dialog = $( "#dialog" ).dialog({ 
+    draggable: false,
+    title: "Warning!",
+    modal: true,
+    dialogClass: "alert no-close",
+    buttons: [ 
+    { text: "Yes", click: function() { 
+        theClick = "Yes";
+        console.log("Dialog Option: " + theClick);
+        $( this ).dialog( "close" ); } }, 
+    { text: "No", click: function() {
+        theClick = "No";
+        console.log("Dialog Option: " + theClick);
+        $( this ).dialog("close");} } 
+    ] });
   dialog.dialog("open");
+  console.log("The User Clicked: " + theClick);
 });
 </script>
   </body> 

@@ -18,14 +18,14 @@ exports.dupe = function(req, res){
   		var txtCust = '{';
   		var dupeCust = new customer();
   		//console.log(req.body);
-  		dupeCust.find('first', {fields: ['custid'], where: "phone = '" + req.body.phone + "' or company = '" + req.body.company +"'"}, function(err, row){
+  		dupeCust.find('first', {fields: ['id'], where: "phone = '" + req.body.phone + "' or company = '" + req.body.company +"'"}, function(err, row){
   			console.log("Searching Table For Dupe!");
   			if (err) {
 				console.log(err);
 				res.send(500, err);
 			} else if (row) {
-  				console.log("Dupe Found: " + row.custid);
-  				res.json(row.custid);
+  				console.log("Dupe Found: " + row.id);
+  				res.json(row.id);
   			} else {
   				console.log("No Dupe Found!");
   				res.send("nodupe");
@@ -78,6 +78,11 @@ exports.save = function(req, res){
   		var jsonCust = eval ("(" + txtCust + ")");
   		var newCust = new customer(jsonCust);
   		console.log(jsonCust);
+  		if (req.body.id) {
+  			newCust.set('id', req.body.id);
+  			console.log("Dupe Overwrite");
+  		}
+  		console.log
   		newCust.save(function(err){
   			if (err) console.log(err);
   		});
