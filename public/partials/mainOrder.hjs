@@ -199,5 +199,15 @@
                     <textarea id="ccRepNts" cols="33"></textarea>
                 </div>
             </fieldset>
+        <script type="text/javascript">
+        
+        $(function() {
+            $( "#payDt" ).datepicker();
+            $( "#orderDt" ).datepicker();
+            $( "#cbDate" ).datepicker();
+            $( "#tjDt" ).datepicker();
+            $( "#reDate" ).datepicker();
+        });
+       </script>
         </form>
     </div>

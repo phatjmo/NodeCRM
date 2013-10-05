@@ -58,5 +58,15 @@
             </li>
         </ul>
         </fieldset>
+        <script type="text/javascript">
+        
+        $(function() {
+        $( "#shipdDt" ).datepicker();
+        });
+        $(function() {
+        $( "#recvdDt" ).datepicker();
+        });
+
+        </script>
         </form>
     </div>

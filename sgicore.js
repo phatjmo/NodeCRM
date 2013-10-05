@@ -155,7 +155,7 @@ app.post('/login', function(req, res){
         			req.session.success = 'Authenticated as ' + user.login
         			+ ' click to <a href="/logout">logout</a>. '
         			+ ' You may now access <a href="/restricted">/restricted</a>.';
-        			console.log("Session Saved: " + req.session.user.userid + ":" + req.session.user.login + ":" + req.session.user.firstName + ":" + req.session.user.lastName);
+        			console.log("Session Saved: " + req.session.user.id + ":" + req.session.user.login + ":" + req.session.user.firstName + ":" + req.session.user.lastName);
         			res.redirect('sgicore');
       			});
     		} else {

@@ -99,5 +99,17 @@
 			</ul>
 
     	</fieldset>
+        <script type="text/javascript">
+
+            $(function() {
+                //Initializing Date Pickers
+                $( "#shipdDt" ).datepicker();
+                $( "#recvdDt" ).datepicker();
+                $( "#state" ).autocomplete({
+                    source: availableTags
+                });
+            });
+        
+        </script>
         </form>
     </div>

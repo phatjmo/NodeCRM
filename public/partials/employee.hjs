@@ -58,5 +58,15 @@
             </li>
         </ul>
         </fieldset>
+        <script type="text/javascript">
+        
+        $(function() {
+        $( "#dob" ).datepicker();
+        });
+        $(function() {
+        $( "#startDt" ).datepicker();
+        });
+
+        </script>
         </form>
     </div>

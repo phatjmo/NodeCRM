@@ -176,7 +176,7 @@ exports.menus = function(req, res){
 
 console.log("Menus Requested: \n");
  
-  var userid = req.session.user.userid;
+  var userid = req.session.user.id;
   var menu = req.body.menu;
   
 
