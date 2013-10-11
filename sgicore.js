@@ -205,6 +205,31 @@ app.get("/hashthis", function(req, res){
 
 	}
   });
+app.post("/hashthis", function(req, res){
+  if (req.body.password) {
+  var pass = req.body.password;
+  var response = {
+      hash: "",
+      salt: ""
+    };
+  console.log("Hashing Password: " + pass);
+  hash(pass, function(err, salt, hash){
+      if (err) throw err;
+      // store the salt & hash in the "db"
+      console.log("The hash is: " + hash);
+      console.log("The salt is: " + salt);
+      response.hash = hash;
+      response.salt = salt;
+      response.message = "SUCCESS";
+      
+      res.json(response);
+    });
+  } else {
+    response.message = "FAILED";
+    res.json(response);
+  }
+
+  });
 
 
 

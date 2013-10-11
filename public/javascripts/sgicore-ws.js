@@ -98,8 +98,8 @@
                     jsonQuery.company = $( "#frmCust #company" ).val();
                     break;
                  case 'frmUser':
-                    jsonQuery.phone = $( "#frmCust #phone" ).val();
-                    jsonQuery.company = $( "#frmCust #company" ).val();
+                    jsonQuery.login = $( "#frmUser #login" ).val();
+                    //jsonQuery.company = $( "#frmCust #company" ).val();
                     break;
                 default:
                     console.log("Invalid Form Submitted!");        
@@ -164,26 +164,72 @@
 
         function processForm (form, dupeID) {
             
-            var procForm = "#" + form;
-            //var postString = "{\"" + form + "\": [{";
-            var txtPost = '{ "formName": "' + form + '"' ;
-           
-            $(procForm + ' input').each(function(i) {
-                var inputField = $(this).prop('id');
-                txtPost += ',';
-                txtPost += '"' + inputField + '": "' + $(procForm + ' #' + inputField).val()+'"';
-            });
-            txtPost += '}';
-            var jsonPost = $.parseJSON(txtPost);
-            if (dupeID) {
-                jsonPost.id = dupeID
-            };
-
-            console.log(jsonPost);
-            $.post( 'save', jsonPost, function() {
-                console.log("Save Attempted.");
-            });
             
+           
+         switch(form)
+          {
+            case "frmUser":
+                var jsonPost = {
+                    "formName" : "frmUser",
+                    "menus" : [
+                              ]
+                    };
+
+                $("input[id|='menu']:checked").each(function(i){
+                    jsonPost.menus.push($.parseJSON($(this).val()));
+                });
+                //Add "LogOff" to the end of the list.
+                jsonPost.menus.push({
+                        "menu" : "mainMenu",
+                        "command" : "logoff", 
+                        "label" : "LogOff"
+                        });
+
+                $('#frmUser input').each(function(i) {
+                    var inputField = $(this).prop('id');
+                    if (inputField.substr(0,4) != "menu") {
+                        eval( 'jsonPost.' + inputField +' = $(this).val()');
+                        console.log(inputField + " = " + $(this).val())
+                    }
+                });
+                
+                if (dupeID) {
+                    jsonPost.id = dupeID
+                    /*$(jsonPost.menus).each(function(i) {
+                        $(this).userId = dupeID;
+                        console.log($(this));
+                    });*/
+                    for (menu in jsonPost.menus) {
+                        jsonPost.menus[menu].userId = dupeID;
+                        console.log("Added userId: " + jsonPost.menus[menu].userId + " to menu option: " + jsonPost.menus[menu].command);
+                    }
+                };
+                console.log(jsonPost);
+                 $.post( 'save', jsonPost, function() {
+                    console.log("User Save Attempted.");
+                });
+            break;
+            case "frmCust":
+                var procForm = "#" + form;
+                //var postString = "{\"" + form + "\": [{";
+                var txtPost = '{ "formName": "' + form + '"' ;
+                $(procForm + ' input').each(function(i) {
+                    var inputField = $(this).prop('id');
+                    txtPost += ',';
+                    txtPost += '"' + inputField + '": "' + $(procForm + ' #' + inputField).val()+'"';
+                });
+                txtPost += '}';
+                var jsonPost = $.parseJSON(txtPost);
+                if (dupeID) {
+                    jsonPost.id = dupeID
+                };
+
+                console.log(jsonPost);
+                $.post( 'save', jsonPost, function() {
+                    console.log("Save Attempted.");
+                });
+            break;
+         }
             
 
         }
@@ -204,5 +250,53 @@
             
         }
         
-
+        function password(){
+            if ($("#password").val() == "") return;
+            if ($("#password").val() != $("#repass").val()){
+                $( "#dialog" ).text("Passwords don't match!");
+                        var dialog = $( "#dialog" ).dialog({ 
+                                resizable: false,
+                                appendTo: ".workspace",
+                                draggable: false,
+                                title: "Warning!",
+                                modal: true,
+                                dialogClass: "alert no-close",
+                                 buttons: [ 
+                                    { text: "OK", click: function() { 
+                                       $("#password").val("");
+                                       $("#repass").val("");
+                                       $("#password").focus();
+                                       $( this ).dialog( "close" ); } } 
+                                    ]
+                                });
+                        dialog.dialog("open");
+                        
+            } else {
+                $.post("hashthis", {"password" : '"' + $("#password").val() + '"'}, function(data){
+                    if (data.message == "SUCCESS") {
+                        $("#encryptedPass").val(data.hash);
+                        $("#salt").val(data.salt);
+                    } else {
+                        $( "#dialog" ).text("There was a problem with encrypting this password!");
+                        var dialog = $( "#dialog" ).dialog({ 
+                                resizable: false,
+                                appendTo: ".workspace",
+                                draggable: false,
+                                title: "Warning!",
+                                modal: true,
+                                dialogClass: "alert no-close",
+                                buttons: [ 
+                                    { text: "OK", click: function() { 
+                                       $("#password").val("");
+                                       $("#repass").val("");
+                                       $("#password").focus();
+                                       $( this ).dialog( "close" ); } } 
+                                    ]
+                                });
+                        dialog.dialog("open");
+                        
+                    }
+                });
+            }
+        }
 
