@@ -1,14 +1,20 @@
 <!-- User Window -->
-    <div class="window float" id="users">
-        <form id="frmUser">
+<div class="ui-widget-content window float" id="users" menu="userMenu" style="display:none;">
+         
+         <h3 class="ui-accordion-header ui-helper-reset ui-state-default ui-accordion-header-active ui-state-active ui-corner-top ui-accordion-icons" role="tab" aria-controls="ui-accordion-accordion-panel-0" aria-selected="true" tabindex="0">
+         <span class="close ui-accordion-header-icon ui-icon ui-icon-closethick" onClick="hideMe('users');">
+             
+         </span><center><a href="#">SGI Core Users</a></center></h3>
 
-        <fieldset class="entry" id="ftabs">
-        <legend>SGI Core Users</legend>
-        <div class="close">[<a onClick="hideMe('users');">X</a>]</div>
+        <form id="frmUser" class="entry">
 
-        
-            <fieldset class="entry">
-            <legend>User Info</legend>
+            <div id="tabs">
+                <ul>
+                    <li><a href="#fragment-1">User Info</a></li>
+                    <li><a href="#fragment-2">Main Menu</a></li>
+                    <li><a href="#fragment-3">Customer Menu</a></li>
+                </ul>
+            <div id="fragment-1">
                 <ul>
                     <li>
                         <label>F Name</label>
@@ -34,10 +40,9 @@
                     </li>
                     <li><input type="hidden" id="encryptedPass"><input type="hidden" id="salt"></li>
                 </ul>
-            </fieldset>
-            <fieldset class="entry">
-            <legend>Main Menu</legend>
-                <ul>
+            </div>
+            <div id="fragment-2">
+                 <ul>
                     <li>
                         <input type="checkbox" value='{"menu" : "mainMenu", "command" : "mainCust", "label" : "Main Cust"}' id="menu-mainCust"><label>Main Cust</label>
                         <input type="checkbox" value='{"menu" : "mainMenu", "command" : "mainOrder", "label" : "Main Orders"}' id="menu-mainOrder"><label>Main Order</label>
@@ -47,9 +52,9 @@
                         <input type="checkbox" value='{"menu" : "mainMenu", "command" : "users", "label" : "Users"}' id="menu-users"><label>Users</label>
                     </li>
                 </ul>
-            </fieldset>
-            <fieldset class="entry">
-            <legend>Customer Menu</legend>
+            </div>
+            <div id="fragment-3">
+            
                 <ul>
                     <li>
                         <input type="checkbox" value='{"menu" : "custMenu", "command" : "loadlist", "label" : "Load List"}' id="menu-loadlist"><label>Load List</label>
@@ -58,11 +63,11 @@
                         <input type="checkbox" value='{"menu" : "custMenu", "command" : "loadticketnew", "label" : "Load Ticket New"}' id="menu-loadticketnew"><label>Employee</label>
                     </li>
                 </ul>
-            </fieldset>
-           
+            </div>
+           </div>
    
                 
-        </fieldset>
+       
         <script type="text/javascript">
         
         //$(function() {
@@ -74,6 +79,8 @@
         $(function() {
         $( "#recvdDt" ).datepicker();
         });*/
+        $( "button" ).button();
+        $( "#tabs" ).tabs();
 
         </script>
         </form>

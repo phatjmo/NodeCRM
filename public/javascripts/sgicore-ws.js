@@ -58,7 +58,8 @@
         function drawMenu (menu) {
             showMenu = "#"+menu;
             
-            $('#menus').append('<ul id="' + menu + '" style="display:none;"></ul>');
+            //$('#menus').append('<ul id="' + menu + '" style="display:none;"></ul>');
+            $('#menus').append('<ul id="' + menu + '"></ul>');
             $.post("menus", {"menu" : '"' + menu + '"'}, function(data){
                 console.log(data);
                 for (i in data.menus) {
@@ -69,7 +70,8 @@
                     //console.log(data.menus[i].command);
                     //console.log(data.menus[i].label);
                 }
-            $(showMenu).show("slide","fast");
+            //$(showMenu).show("slide","fast");
+            $(showMenu).menu();
                 //console.log(data);
             });
             $()

@@ -1,10 +1,12 @@
 <!-- Employee Screen -->
-    <div class="window float" id="employee" menu="empMenu">
-        <form id="frmEmp">
+    
+    <div class="ui-widget-content window float" id="employee" menu="empMenu" style="display:none;">
+         
+         <h3 class="ui-accordion-header ui-helper-reset ui-state-default ui-accordion-header-active ui-state-active ui-corner-top ui-accordion-icons" role="tab" id="ui-accordion-accordion-header-0" aria-controls="ui-accordion-accordion-panel-0" aria-selected="true" tabindex="0"><span class="close ui-accordion-header-icon ui-icon ui-icon-closethick" onClick="hideMe('employee');"></span><center><a href="#">Specialty Graphics Employee Entry Window</a></center></h3>
+        <form id="frmEmp" class="entry">
 
-        <fieldset class="entry">
-        <legend>Specialty Graphics Employee Entry Window</legend>
-        <div class="close">[<a onClick="hideMe('employee');">X</a>]</div>
+       
+        
         <ul>
             <li><label>Salesperson</label>    
                 <input type=text id='salespersn'>
@@ -44,7 +46,7 @@
             </li>
         </ul>
         </div>
-        <ul class="left">
+        <ul>
             <li><label>Weekly Salary</label>    
                 <input type=text id='salary'>
                 <label>Office</label>
@@ -57,7 +59,7 @@
                 <input type="text" id="lastStat">
             </li>
         </ul>
-        </fieldset>
+       
         <script type="text/javascript">
         
         $(function() {
@@ -66,7 +68,7 @@
         $(function() {
         $( "#startDt" ).datepicker();
         });
-
+        $( "button" ).button();
         </script>
         </form>
     </div>

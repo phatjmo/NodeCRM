@@ -1,9 +1,10 @@
 <!-- Main Order Window -->
-    <div class="window" id="mainOrder" menu="orderMenu">
-        <form id="frmOrder">
-            <fieldset class="entry full">
-                <legend>Specialty Graphics Order Entry Window</legend>
-                <div class="close">[<a onClick="hideMe('mainOrder');">X</a>]</div>
+<div class="ui-widget-content window" id="mainOrder" menu="orderMenu" style="display:none;">
+         
+         <h3 class="ui-accordion-header ui-helper-reset ui-state-default ui-accordion-header-active ui-state-active ui-corner-top ui-accordion-icons" role="tab" id="ui-accordion-accordion-header-0" aria-controls="ui-accordion-accordion-panel-0" aria-selected="true" tabindex="0"><span class="close ui-accordion-header-icon ui-icon ui-icon-closethick" onClick="hideMe('mainOrder');"></span><center><a href="#">Specialty Graphics Order Entry Window</a></center></h3>
+    
+        <form id="frmOrder" class="entry">
+           
                 <ul>
                     <li>
                         <label>Order_#</label>    
@@ -198,7 +199,7 @@
                     <label>CCRepNts</label><br>
                     <textarea id="ccRepNts" cols="33"></textarea>
                 </div>
-            </fieldset>
+            
         <script type="text/javascript">
         
         $(function() {
@@ -207,6 +208,7 @@
             $( "#cbDate" ).datepicker();
             $( "#tjDt" ).datepicker();
             $( "#reDate" ).datepicker();
+            $( "button" ).button();
         });
        </script>
         </form>

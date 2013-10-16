@@ -3,57 +3,21 @@
   <head>
   {{> head}}
    </head>
-  <body>
+  <body class="ui-widget-overlay">
 <!--<button id="btnCust" onclick="switchWin('main_cust',this);">Show Orders</button>
 <button id="btnOrder"  onclick="switchWin('main_order',this);">Show Cust</button>
 <button id="btnEmp"  onclick="switchWin('employee',this);">Show Employee</button>-->
-   <div class="workspace">
+   
+   <div class="workspace ui-corner-all">
+   <div id="menus" class="ui-menu leftmenu"></div>
      <!-- {{> menu}} -->
-    <div id="menus" class="menu single">
-    <!--	<ul id="mainMenu">
-    	<li><a onclick="hitMenu('mainCust');">Main Cust</a></li>
-    		<li><a onclick="hitMenu('mainOrder');">Main Orders</a></li>
-    		<li><a onclick="hitMenu('products');">Products</a></li>
-    		<li><a onclick="hitMenu('employee');">Employees</a></li>
-    		<li><a onclick="hitMenu('admin');">Administration</a></li>
-    		<li><a onclick="hitMenu('utils');">Utilities</a></li>
-    		<li><a onclick="hitMenu('logoff');">LogOff</a></li>
-    	</ul> -->
-   <!-- </div>-->
-
-    <!-- <div class="menu single" id="custMenu" style="display: none;"> -->
-    <!--    <ul id="custMenu" style="display:none;">
-            <li><a onclick="hitMenu('loadlist');">Load List</a></li>
-            <li><a onclick="hitMenu('loadticket');">Load Ticket</a></li>
-            <li><a onclick="hitMenu('employees');">Count SIC H's</a></li>
-            <li><a onclick="hitMenu('admin');">Load Ticket New</a></li>
-        </ul>
-    <!--</div>-->
-    <!--<div class="menu single" id="orderMenu" style="display: none;">-->
-    <!--   <ul id="orderMenu" style="display:none;">
-            <li><a onclick="hitMenu('loadlist');">Load List</a></li>
-            <li><a onclick="hitMenu('loadticket');">Load Ticket</a></li>
-            <li><a onclick="hitMenu('employees');">Count SIC H's</a></li>
-            <li><a onclick="hitMenu('admin');">Load Ticket New</a></li>
-        </ul> -->
-    </div>
+    
   
- <div id="windowPane" class="windowpane">
+ <div id="windowPane" class="ui-corner-all ui-widget ui-widget-content windowpane">
     <!-- {{> window}} -->
  </div>
      <!-- {{> footer}} -->
- <div class="status">
-   	<ul>
-   		<li>| <a onclick="popWin('browse');">&lt;Browse&gt;</a></li>
-   		<li>| <a onclick="popWin('options');">&lt;Options&gt;</a></li>
-   		<li> <a onclick="popWin('softkeys');">&lt;Softkeys&gt;</a></li>
-   		<li> <a onclick="saveData();">&lt;Save&gt;</a></li>
-   		<li>|       </li>
-   		<li>| NL    </li>
-   		<li>| 2		</li>
-   	</ul>
-    </div>
-  </div>       
+ 
    
    <script type="text/javascript">
     $('document').ready(function(){
@@ -61,12 +25,12 @@
       });
    </script>
 
-   <div class="background">
+  <!--<div class="background">
     {{< background}} 
     {{< background}}   	
-    {{< background}}    
-   </div>  
- <button id="opener">open the dialog</button>  
+    {{< background}}
+   </div>  -->
+ <!--<button id="opener">open the dialog</button>  -->
  <div id='dialog' title='Dialog Title'> This is a Dialog! </div>
  <script>
 $( "#dialog" ).dialog({ autoOpen: false });
@@ -98,7 +62,7 @@ $( "#opener" ).click(function() {
         "NM","NY","NC","ND","OH","OK","OR","PA","RI","SC",
         "SD","TN","TX","UT","VT","VA","WA","WV","WI","WY"
         ];
-
+  $( "button" ).button();
 </script>
 
 
