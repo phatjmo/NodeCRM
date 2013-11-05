@@ -1,204 +1,252 @@
 <!-- Main Order Window -->
-<div class="ui-widget-content window" id="mainOrder" menu="orderMenu" style="display:none;">
+<div class="ui-widget-content ui-corner-all window" id="mainOrder" menu="orderMenu" style="display:none;">
          
          <h3 class="ui-accordion-header ui-helper-reset ui-state-default ui-accordion-header-active ui-state-active ui-corner-top ui-accordion-icons" role="tab" id="ui-accordion-accordion-header-0" aria-controls="ui-accordion-accordion-panel-0" aria-selected="true" tabindex="0"><span class="close ui-accordion-header-icon ui-icon ui-icon-closethick" onClick="hideMe('mainOrder');"></span><center><a href="#">Specialty Graphics Order Entry Window</a></center></h3>
     
         <form id="frmOrder" class="entry">
-           
+           <div class="table">
                 <ul>
                     <li>
                         <label>Order_#</label>    
                         <input type=text id='orderNum' size="5">
+                    </li>
+                    <li>
                         <label>Pay_date</label>    
                         <input type=text id='payDt' size="5">
+                    </li>
+                    <li>
                         <label>Order_date</label>    
                         <input type=text id='orderDt' size="5">
                     </li>
                 </ul>
-                <ul class="left">
+                <ul>
                     <li><label>Cust_#</label>
                         <input type="text" id="custId" size="5">
                     </li>
-                    <li><label>Company</label>
-                        <input type="text" id="company">
-                    </li>
-                    <li><label>Address</label>
-                        <input type="text" id="address">
-                    </li>
-                    <li><label>CSZip</label>
-                        <input type="text" id="csZip">
-                    </li>
-                </ul>
-                <ul class="left" >
                     <li><label>Name</label>
                         <input type="text" id="name" size="3">
                     </li>
+                    <li><label>Use Order Address?</label>    
+                        <input type=text id='useOrdAdd' size="1">
+                    </li>
+                </ul>
+                <ul>
+                    <li><label>Company</label>
+                        <input type="text" id="company">
+                    </li>
                     <li><label>Salespersn</label>
                         <input type="text" id="salespersn" size="1">
+                    </li>
+                    <li><label>CustType</label>
+                        <input type="text" id="custType" size="1">
+                    <li>
+                        <label>New</label>
+                        <input type="text" id="new" size="1">
+                    </li>
+                    <li>
+                        <label>Cycle</label>
+                        <input type="text" id="cycle" size="1">
+                    </li>
+                </ul>
+                <ul>
+                    <li>
+                        <label>Address</label>
+                        <input type="text" id="address">
+                    </li>
                     <li>
                         <label>T/O_rep</label>
                         <input type="text" id="toRep" size="1">
+                    </li>
+                     <li>
+                        <label>PriceType</label>
+                        <input type="text" id="priceType" size="1">
+                    </li>
+                    <li>
+                        <label>Logo</label>
+                        <input type="text" id="logo" size="1">
+                    </li>
+                </ul>
+                <ul>
+                    <li>
+                        <label>CSZip</label>
+                        <input type="text" id="csZip">
                     </li>
                     <li>
                         <label>T/O_comm</label>
                         <input type="text" id="toComm" size="1">
                     </li>
                 </ul>
-                <ul class="right" >
-                    <li><label>Use Order Address?</label>    
-                        <input type=text id='useOrdAdd' size="1">
-                    </li>
-                    <li><label>CustType</label>
-                        <input type="text" id="custType" size="1">
-                    <label>New</label>
-                        <input type="text" id="new" size="1">
-                    <label>Cycle</label>
-                        <input type="text" id="cycle" size="1">
-                    </li>
-                    <li><label>PriceType</label>
-                        <input type="text" id="priceType" size="1">
-                        <label>Logo</label>
-                        <input type="text" id="logo" size="1">
-                    </li>
-                </ul>
-                <div class="left">
-                    <table id="lineItem" class="lineitem">
-                        <thead>
-                        <tr>
-                            <th><label>Qty</label></th>                        
-                            <th><label>Prod</label></th>                        
-                            <th><label>Description</label></th>                        
-                            <th><label>Price</label></th>
-                            <th><label>Line_total</label></th>
-                        </tr>
-                        </thead>
-                        <tbody>
-                        <tr>
-                            <td><input type="text" id="qty" size="1"></td>
-                            <td><input type="text" id="code" size="1"></td>
-                            <td><input type="text" id="desc" size="40"></td>
-                            <td><input type="text" id="price" size="1"></td>
-                            <td><input type="text" id="lineTotal" size="7"></td>
-                        </tr>
-                        </tbody>
-                    </table>
-                      <table id="chargeBacks" class="lineitem">
-                            <tr>
-                            <th colspan="2"><label>Chargebacks</label></th>                        
-                            <th><label>Date</label></th>                                            
-                            <th><label>$</label></th>
-                            <th rowspan="3">
-                                <label>SPG_par</label><br>
-                                <label>Shipping</label><br>
-                                <label>Invtotal</label>
-                            </th> 
-                            <td rowspan="3"> 
-                                <input type="text" id="spgPar" size="7"><br>
-                                <input type="text" id="shipping" size="7"><br>
-                                <input type="text" id="invTotal" size="7">                      
-                            </td> 
-                            
-                            </tr>
-                            <tr>
-                            <td rowspan="2"><input type="text" id="chargeBack" size="1"></td>
-                            <td rowspan="2"><input type="text" id="cbDesc"></td>
-                            <td rowspan="2"><input type="text" id="cbDate" size="5"></td>
-                            <td rowspan="2"><input type="text" id="cbAmt" size="1"></td>
-                            </tr>
-                            <tr></tr>
-                            <tfoot>
-                            <tr>
-                               <td colspan="2"><ul class="left">                            
-                                <label>Order Correction +-</label><br>
-                                <div class="left">
-                                <label>CRcard</label><br>
-                                <input type="text" id="crCard" size="10">                            
-                                </div>
-                                <div class="right">
-                                <label>Receivd</label><br>
-                                <input type="text" id="web" class="right" size="4">
-                                </div>
-                            
-                            </td>
-                               <td></td> 
-                               <td colspan="3">
-                                   
-                                <div class="right"><label>o/w&nbsp;</label><input type="text" id="ow" size="10"></div><br>
-                                <div class="right"><label>Orig_com&nbsp;</label><input type="text" id="origCom" size="10"></div><br>
-                                <div class="right"><label>Net_com&nbsp;</label><input type="text" id="netCom" size="10"></div><br>                            
-                                <div class="right"><label>Trackng#&nbsp;</label><input type="text" id="tracking" size="10"></div>
-
-                               </td>
-                               
-                               
-
-                            </tr>
-                       </tfoot>
-                       </table> 
+            </div>    
+        <div class="table">
+            <ul>
+                <li>
+                    <div id="lineItem" class="table orders">
+                        <ul>
+                            <li class="border-all"><label>Qty</label></li>                        
+                            <li class="border-all"><label>Prod</label></li>                        
+                            <li class="border-all"><label>Description</label></li>                        
+                            <li class="border-all"><label>Price</label></li>
+                            <li class="border-all"><label>Line_total</label></li>
+                        </ul>
+                       
+                       
+                        <ul>
+                            <li class="border-left border-right"><input type="text" id="qty" size="2"></li>
+                            <li class="border-left border-right"><input type="text" id="code" size="4"></li>
+                            <li class="border-left border-right"><input type="text" id="desc" size="30"></li>
+                            <li class="border-left border-right"><input type="text" id="price" size="4"></li>
+                            <li class="border-left border-right"><input type="text" id="lineTotal" size="7"></li>
+                        </ul>
+                         <ul>
+                            <li class="border-left border-right"><input type="text" id="qty2" size="2"></li>
+                            <li class="border-left border-right"><input type="text" id="code2" size="4"></li>
+                            <li class="border-left border-right"><input type="text" id="desc2" size="30"></li>
+                            <li class="border-left border-right"><input type="text" id="price2" size="4"></li>
+                            <li class="border-left border-right"><input type="text" id="lineTotal2" size="7"></li>
+                        </ul>
                     </div>
-                    <ul class="right slimcol">
-                    <li><label>TJ Dt</label>
-                        <input type="text" id="tjDt" size="1">
-                    <li><label>TJ Resolve</label>
-                        <input type="text" id="tjResolv"size="1">
+                    <div class="table">    
+                        <ul>
+                            <li>
+                                <div id="chargeBacks" class="table orders">
+                                    <ul>
+                                        <li class="border-left border-top"><label>Chargebacks</label></li>                        
+                                        <li class="border-top"><label>Date</label></li>                                            
+                                        <li class="border-top border-right"><label>$</label></li>
+                                        <li class="border-left border-top border-right"><label>SPG_par</label></li>
+                                        <li class="border-left border-top border-right"><input type="text" id="spgPar" size="7"></li>
+                                    </ul>
+                                    <ul>
+                                        <li class="border-left border-right"><input type="text" id="chargeBack" size="2"><input type="text" id="cbDesc" size="40"></li>
+                                        <li class="border-left border-right"><input type="text" id="cbDate" size="8"></li>
+                                        <li class="border-left border-right"><input type="text" id="cbAmt" size="4"></li>
+                                        <li class="border-left border-right"><label>Shipping</label></li>
+                                        <li class="border-left border-right"><input type="text" id="shipping" size="7"></li>
+                                    </ul>
+                                    <ul>
+                                        <li class="border-left border-right"><input type="text" id="chargeBack2" size="2"><input type="text" id="cbDesc" size="40"></li>
+                                        <li class="border-left border-right"><input type="text" id="cbDate2" size="8"></li>
+                                        <li class="border-left border-right"><input type="text" id="cbAmt2" size="4"></li>
+                                        <li class="border-left border-right"><label>Invtotal</label></li>
+                                        <li class="border-left border-right"><input type="text" id="invTotal" size="7"></li>
+                                    </ul>
+                                    <ul>
+                                        <li class="border-top border-right">                           
+                                            <label>Order Correction +-</label><br>
+                                            <div class="table">
+                                                <ul>
+                                                    <li><label>CRcard</label></li>
+                                                    <li><input type="text" id="crCard" size="2"></li>
+                                                    <li><label>Receivd</label></li>
+                                                    <li><input type="text" id="received" size="4"></li>
+                                                </ul>
+                                            </div>
+                                            
+                                        </li>
+                                        <li class="border-left border-right border-top"></li>
+                                        <li class="border-left border-top"></li>
+                                        <li class="border-top"><label>o/w&nbsp;</label><br>
+                                            <label>Orig_com&nbsp;</label><br>
+                                            <label>Net_com&nbsp;</label><br>
+                                            
+                                        </li>
+                                        <li class="border-top border-right">
+                                            <input type="text" id="ow" size="7"><br>
+                                            <input type="text" id="origCom" size="7"><br>
+                                            <input type="text" id="netCom" size="7"><br>                            
+                                           
+                                        </li>
+                                    </ul>
+                                </div>
+                                <div class="table">
+                                     <ul>
+                                        <li>
+                                            <label>Comments</label><br>
+                                            <textarea id="comments" cols="33"></textarea>
+                                        </li>
+                                        <li></li>
+                                        <li>
+                                            <label>Trackng#&nbsp;</label><br>
+                                             <input type="text" id="tracking" size="20">
+                                        </li>
+                                    </ul>
+                                    <ul>    
+                                        <li>
+                                            <label>CCRepNts</label><br>
+                                            <textarea id="ccRepNts" cols="33"></textarea>
+                                        </li> 
+                                    </ul>
+                                </div>   
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="table">
+                        
+                    </div>
                     </li>
-                    <li><label>Cancel</label>
-                        <input type="text" id="cancel" size="1">
                     <li>
-                        <label>Actual</label>
-                        <input type="text" id="actual" size="1">
-                    </li>
-                        <li><label>Rush</label>
-                        <input type="text" id="rush" size="1">
-                    <li>
-                        <label>ShpVia</label>
-                        <input type="text" id="shpVia" size="1">
-                    </li>
-                    <li>
-                        <label>Res</label>
-                        <input type="text" id="res" size="1">
-                    </li>
-                    <li>
-                        <label>Typset</label>
-                        <input type="text" id="typset" size="1">
-                    </li>
-                    <li>
-                        <label>TSD2</label>
-                        <input type="text" id="TSD2" size="1">
-                    </li>
-                    <li>
-                        <label>Ship</label>
-                        <input type="text" id="ship" size="1">
-                    </li>
-                    <li>
-                        <label>Return</label>
-                        <input type="text" id="return" size="1">
-                    </li>
-                    <li>
-                        <label>Reship</label>
-                        <input type="text" id="reShip" size="1">
-                    </li>
-                    <li>
-                        <label>&nbsp;Date</label>
-                        <input type="text" id="reDate" size="1">
-                    </li>
-                    <li>
-                        <label>&nbsp;Price</label>
-                        <input type="text" id="rePrice" size="1">
-                    </li>
-                    <li>
-                        <label>Weight</label>
-                        <input type="text" id="weight" size="1">
+                       <ul class="slimcol">
+                            <li><label>TJ Dt</label>
+                                <input type="text" id="tjDt" size="1">
+                            <li><label>TJ Resolve</label>
+                                <input type="text" id="tjResolv"size="1">
+                            </li>
+                            <li><label>Cancel</label>
+                                <input type="text" id="cancel" size="1">
+                            <li>
+                                <label>Actual</label>
+                                <input type="text" id="actual" size="1">
+                            </li>
+                                <li><label>Rush</label>
+                                <input type="text" id="rush" size="1">
+                            <li>
+                                <label>ShpVia</label>
+                                <input type="text" id="shpVia" size="1">
+                            </li>
+                            <li>
+                                <label>Res</label>
+                                <input type="text" id="res" size="1">
+                            </li>
+                            <li>
+                                <label>Typset</label>
+                                <input type="text" id="typset" size="1">
+                            </li>
+                            <li>
+                                <label>TSD2</label>
+                                <input type="text" id="TSD2" size="1">
+                            </li>
+                            <li>
+                                <label>Ship</label>
+                                <input type="text" id="ship" size="1">
+                            </li>
+                            <li>
+                                <label>Return</label>
+                                <input type="text" id="return" size="1">
+                            </li>
+                            <li>
+                                <label>Reship</label>
+                                <input type="text" id="reShip" size="1">
+                            </li>
+                            <li>
+                                <label>&nbsp;Date</label>
+                                <input type="text" id="reDate" size="1">
+                            </li>
+                            <li>
+                                <label>&nbsp;Price</label>
+                                <input type="text" id="rePrice" size="1">
+                            </li>
+                            <li>
+                                <label>Weight</label>
+                                <input type="text" id="weight" size="1">
+                            </li>
+                        </ul>  
                     </li>
                 </ul>
-                 <div class="left">
-                    <label>Comments</label><br>
-                    <textarea id="comments" cols="33"></textarea>
-                </div>
-                <div class="left">
-                    <label>CCRepNts</label><br>
-                    <textarea id="ccRepNts" cols="33"></textarea>
-                </div>
+                      
+        </div>
+                    
+                
+                 
             
         <script type="text/javascript">
         
@@ -212,4 +260,9 @@
         });
        </script>
         </form>
+        <div class="status">
+            <button class="ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only" onclick="saveData();">
+                <span class="ui-button-text">Save</span>
+            </button>
+        </div>       
     </div>

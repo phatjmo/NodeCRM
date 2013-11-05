@@ -1,13 +1,12 @@
 <!-- Main Customer Window -->
-    <div class="ui-widget-content window" id="mainCust" menu="custMenu" style="display:none;">
+    <div class="ui-widget-content ui-corner-all window" id="mainCust" menu="custMenu" style="display:none;">
     	 
          <h3 class="ui-accordion-header ui-helper-reset ui-state-default ui-accordion-header-active ui-state-active ui-corner-top ui-accordion-icons" role="tab" id="ui-accordion-accordion-header-0" aria-controls="ui-accordion-accordion-panel-0" aria-selected="true" tabindex="0"><span class="close ui-accordion-header-icon ui-icon ui-icon-closethick" onClick="hideMe('mainCust');"></span><center><a href="#">Customer Entry Window</a></center></h3>
 
-         <!--<div class="close"><span class="ui-icon ui-icon-closethick" onClick="hideMe('mainCust');"></span></div>
-         <center><span class="ui-widget-header">Customer Entry Window</span></center>-->
+         
         <form id="frmCust" class="ui-widget-content entry">
         
-       <!--<div class="close"><a onClick="hideMe('mainCust');"><span class="ui-icon-closethick" ></span></a></div>-->
+      
     	<ul class="left">
     		<li><label>Phone</label>	
     			<input type=text id='phone'>
@@ -117,16 +116,9 @@
         </script>
         </form>
         <div class="status">
-    <ul>
-        <li>| <a onclick="popWin('browse');">&lt;Browse&gt;</a></li>
-        <li>| <a onclick="popWin('options');">&lt;Options&gt;</a></li>
-        <li> <a onclick="popWin('softkeys');">&lt;Softkeys&gt;</a></li>
-        <li> <button class="ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only" onclick="saveData();">
-                <span class="ui-button-text">Save</span>
-              </button>
-        </li>
-        
-    </ul>
-    </div>
+            <button class="ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only" onclick="saveData();">
+               <span class="ui-button-text">Save</span>
+            </button>
+        </div>
   </div>       
     </div>

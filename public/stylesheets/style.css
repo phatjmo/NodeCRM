@@ -1,24 +1,22 @@
+/* LESS Variables */
+/* =============================================
+
+	SGI Core CSS
+
+==============================================*/
 body {
   padding: 10px;
   font-size: 11pt;
-  /*font-family: fixedsys, LucidaTerminal, monospace;*/
-
 }
 a {
   color: #00B7FF;
 }
 div.workspace {
   position: fixed;
-  /*border: thick double lightgray;*/
-
-  /*border-radius: 6px 6px 6px 6px;*/
-
-  width: 1024px;
-  margin: 0% 0% 0% 10%;
-  height: 512px;
-  /*background-color: rgba(0,0,128,.9);*/
-
-  box-shadow: 10px 10px 10px 0px black;
+  width: 100%;
+  margin-right: 25px;
+  height: 640px;
+  padding: 0;
 }
 .main {
   height: 40px;
@@ -29,33 +27,16 @@ div.workspace {
 .leftmenu,
 .leftmenu ul {
   width: 150px;
-  position: fixed;
-  height: 510px;
+  position: absolute;
+  height: 600px;
+  box-shadow: 10px 10px 10px 0px black;
 }
 .windowpane {
-  height: 512px;
-  width: 863px;
-  float: right;
-  /*position:fixed;*/
-
-}
-.window {
-  /*height:370px;*/
-
-  /*position:fixed;*/
-
-  /*display: none;*/
-
-  /*	background-color: darkblue;*/
-
-}
-.status {
-  /*	position:relative;
-	width: 800px;
-	height: 20px;*/
-
-  /*	background-color: darkblue;*/
-
+  height: 602px;
+  width: 1165px;
+  margin-left: 165px;
+  box-shadow: 10px 10px 10px 0px black;
+  position: absolute;
 }
 .status ul {
   margin: 0;
@@ -63,23 +44,9 @@ div.workspace {
 .status ul li {
   list-style: none;
   float: left;
-  /*padding: 0 0 0 20px;
-    margin: 0 0 0 0; 
-    font-size: small;
-    height: 30px;*/
-
-  /*    color: green;*/
-
 }
 .status ul li a {
-  /*	color: green;*/
-
   text-decoration: none;
-}
-.status ul li a:active {
-  /*color: darkblue;
-	background-color: green*/
-
 }
 .entry {
   width: 100%;
@@ -87,46 +54,28 @@ div.workspace {
   padding: 0;
 }
 .entry label {
-  /*	color:yellow;*/
-
-  height: 14px;
-  margin: 1px 0 1px 0;
+  margin: 1px 5px 1px 5px;
   vertical-align: middle;
+  display: inline-block;
 }
 .entry legend {
-  /*color:lightgray;*/
-
   text-align: center;
 }
 .entry input {
   border: 1px solid lightgray;
-  /*background-color: darkblue;
- color: lightgray;*/
-
-  /*height: 16px;
- padding:0;
- margin:1px 0 1px 0;*/
-
   vertical-align: middle;
-  /*font-size: 11pt*/
-
+}
+.entry input[type="text"] {
+  display: inline-block;
 }
 .entry input:hover {
   box-shadow: 0 1px lightgray;
-  /*border:0;*/
-
 }
 .entry input:focus {
   box-shadow: 0 1px lightgray;
-  /*outline:0;*/
-
 }
 .entry textarea {
   border: 0;
-  /*background-color: darkblue;*/
-
-  /*color: lightgray;*/
-
 }
 .entry textarea:hover {
   box-shadow: 0 1px lightgray;
@@ -137,39 +86,24 @@ div.workspace {
   outline: 0;
 }
 .entry input.button {
-  /*	border:3px double lightgray;*/
-
   margin: 15px 5px 5px 5px;
   height: 35px;
   padding: 5px;
   box-shadow: 10px 10px 10px 0px black;
 }
 .entry input.button:hover {
-  /*	border:3px double yellow;*/
-
   margin: 20px 10px auto;
   box-shadow: 0px 0px 0px 0px black;
-}
-.lineitem th {
-  display: table-cell;
-  /*border:2px solid yellow;*/
-
-}
-.lineitem td {
-  /*	border:2px solid yellow;*/
-
 }
 .lineitem {
   border-collapse: collapse;
   width: 600px;
 }
-.lineitem table {
-  border-collapse: collapse;
-  border: 0;
+.lineitem > ul {
+  display: table-row;
 }
-.lineitem tfoot td {
-  border-bottom: 0;
-  border-left: 0;
+.lineitem > ul > li {
+  display: table-cell;
 }
 .entry ul {
   padding: 0;
@@ -178,10 +112,14 @@ div.workspace {
 .entry ul li {
   list-style: none;
 }
-.entry ul li hr {
-  width: 320px;
-  /*color: yellow;*/
-
+.table {
+  display: table;
+}
+.table > ul {
+  display: table-row;
+}
+.table > ul > li {
+  display: table-cell;
 }
 .left {
   float: left;
@@ -189,21 +127,30 @@ div.workspace {
 .right {
   float: right;
 }
+.center {
+  text-align: center;
+}
+.border-all {
+  border: 1px solid #d3d3d3;
+}
+.border-left {
+  border-left: 1px solid #d3d3d3;
+}
+.border-right {
+  border-right: 1px solid #d3d3d3;
+}
+.border-top {
+  border-top: 1px solid #d3d3d3;
+}
+.border-bottom {
+  border-bottom: 1px solid #d3d3d3;
+}
 .slimcol {
   width: 185px;
+  display: block;
 }
 .inline {
   display: inline-block;
-}
-.left .multiline {
-  /*border-top: 2px solid yellow;
- border-right: thin solid yellow;*/
-
-}
-.right .multiline {
-  /*border-top: 2px solid yellow;
- border-left: thin solid yellow;*/
-
 }
 .multiline textarea {
   width: 390px;
@@ -247,8 +194,6 @@ div.workspace {
   width: 790px;
 }
 .float {
-  /*width:650px;*/
-
   box-shadow: 10px 10px 10px 0px black;
   margin: 0 5% auto;
 }
@@ -260,52 +205,36 @@ div.workspace {
   box-shadow: 10px 10px 10px 0px black;
   position: fixed;
   margin: 15% 20% 20% 40%;
-  /*background-color: rgba(0,0,128,.9);*/
-
 }
 .login ul {
   margin: 0 5% 5% 5%;
+}
+.login label {
+  width: 5em;
+  text-align: right;
 }
 .message {
   width: 350px;
   box-shadow: 10px 10px 10px 0px black;
   position: fixed;
   margin: 17% 5% 5% 10%;
-  /* 	background-color: rgba(255,0,0,.9);
-  	color: yellow;*/
-
   display: none;
+}
+.orders {
+  width: 700px;
 }
 strong {
   font-weight: bold;
   color: #1a1a1a;
 }
 .message legend {
-  /*	color:yellow;*/
-
   text-align: center;
-}
-.message fieldset {
-  /*border:1px solid yellow;*/
-
 }
 .close {
   position: absolute;
-  /*	top:0;
-	left:0;*/
-
-  /*	background-color: darkblue;
-	color:lightgray;*/
-
 }
 .close a {
-  /*	color:lightgray;*/
-
   cursor: pointer;
-}
-.close a:hover {
-  /*	color: darkgray;*/
-
 }
 .dos {
   width: 400px;

@@ -1,5 +1,5 @@
 <!-- User Window -->
-<div class="ui-widget-content window float" id="users" menu="userMenu" style="display:none;">
+<div class="ui-widget-content ui-corner-all window float" id="users" menu="userMenu" style="display:none;">
          
          <h3 class="ui-accordion-header ui-helper-reset ui-state-default ui-accordion-header-active ui-state-active ui-corner-top ui-accordion-icons" role="tab" aria-controls="ui-accordion-accordion-panel-0" aria-selected="true" tabindex="0">
          <span class="close ui-accordion-header-icon ui-icon ui-icon-closethick" onClick="hideMe('users');">
@@ -84,4 +84,9 @@
 
         </script>
         </form>
+        <div class="status">
+            <button class="ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only" onclick="saveData();">
+               <span class="ui-button-text">Save</span>
+            </button>
+        </div>
     </div>    

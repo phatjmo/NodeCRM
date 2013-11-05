@@ -25,11 +25,7 @@
       });
    </script>
 
-  <!--<div class="background">
-    {{< background}} 
-    {{< background}}   	
-    {{< background}}
-   </div>  -->
+  
  <!--<button id="opener">open the dialog</button>  -->
  <div id='dialog' title='Dialog Title'> This is a Dialog! </div>
  <script>
