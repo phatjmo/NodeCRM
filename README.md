@@ -1,1 +1,1 @@
-# SGI Core README file
+# NodeCRM README file
